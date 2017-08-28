@@ -29,21 +29,31 @@ def calculate_prob_ans_wbt(prob_ans_eq_truth_wbt, infer_confidence, num_of_worke
     prob_ans_neq_truth_wbt = (1 - prob_ans_eq_truth_wbt)/(num_of_choices - 1)
     # worker selection probability
     prob_ans_wbt = [np.zeros(num_of_workers, num_of_tasks) for _ in range(num_of_choices)]
-    prob_ans_wbt[0] = prob_ans_eq_truth_wbt * infer_confidence[0] + prob_ans_neq_truth_wbt * infer_confidence[1]
-    prob_ans_wbt[1] = prob_ans_neq_truth_wbt * infer_confidence[0] + prob_ans_eq_truth_wbt * infer_confidence[1]
+    prob_ans_wbt[0] = prob_ans_eq_truth_wbt * np.asarray(infer_confidence[0]) + prob_ans_neq_truth_wbt * np.asarray(infer_confidence[1])
+    prob_ans_wbt[1] = prob_ans_neq_truth_wbt * np.asarray(infer_confidence[0]) + prob_ans_eq_truth_wbt * np.asarray(infer_confidence[1])
 
     return prob_ans_wbt
 
 
-def calculate_dei(num_of_workers, num_of_tasks, num_of_choices, infer_expertise, infer_difficulty, infer_confidence):
+def calculate_ei(infer_confidence_score, infer_confidence, infer_expertise_score, infer_difficulty, num_of_workers, num_of_tasks, num_of_choices):
+    #infer_expertise_score and infer_difficulty are "1 x tasks"
+    ei_wbt = [np.zeros(num_of_workers, num_of_tasks) for _ in range(num_of_choices)]
+    updated_confidence_score = [np.zeros(num_of_workers, num_of_tasks) for _ in range(num_of_choices)]
+    updated_confidence = [np.zeros(num_of_workers, num_of_tasks) for _ in range(num_of_choices)]
+
+    for i in range(num_of_choices):
+        updated_confidence_score[i] = np.add([[infer_confidence_score[i]],] * num_of_workers, np.transpose(infer_expertise_score)) # have to add dampen factors
+        updated_confidence[i] = 1/(1 + np.power(math.e, -updated_confidence_score[i])) #make sure the infer/update confidence have the same difficulties
+        ei_wbt[i] = np.abs(np.subtract(updated_confidence[i] * np.asarray(infer_difficulty) - infer_confidence[i]))
+
+    return ei_wbt
+
+
+def calculate_dei(num_of_workers, num_of_tasks, num_of_choices, infer_expertise, infer_expertise_score, infer_difficulty, infer_confidence, infer_confidence_score):
+    # infer_confidence_score is 2 x tasks, infer_expertise_score is 1 x workers
     prob_ans_eq_truth_wbt = 1 / (1 + np.power(math.e, -3 * np.dot(np.transpose(infer_expertise), np.transpose(infer_difficulty))))
     prob_ans_wbt = calculate_prob_ans_wbt(prob_ans_eq_truth_wbt, infer_confidence, num_of_workers, num_of_tasks, num_of_choices)
-
-    # for i in range(num_of_workers):
-    #     for j in range(num_of_tasks):
-    #         dei = 0
-    #         for k in range(num_of_choices):
-    #             dei += (prob_ans * ei)
+    ei_wbt = calculate_ei(infer_confidence_score, infer_confidence, infer_expertise_score, infer_difficulty, num_of_workers, num_of_tasks, num_of_choices)
 
 
 def synthetic_exp(max_number_of_workers, worker_arri_rate, expertise_init, num_of_tasks, difficulty_init, num_of_choices, confidence_init, threshold):
