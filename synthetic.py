@@ -54,6 +54,8 @@ def calculate_dei(num_of_workers, num_of_tasks, num_of_choices, infer_expertise,
     prob_ans_eq_truth_wbt = 1 / (1 + np.power(math.e, -3 * np.dot(np.transpose(infer_expertise), np.transpose(infer_difficulty))))
     prob_ans_wbt = calculate_prob_ans_wbt(prob_ans_eq_truth_wbt, infer_confidence, num_of_workers, num_of_tasks, num_of_choices)
     ei_wbt = calculate_ei(infer_confidence_score, infer_confidence, infer_expertise_score, infer_difficulty, num_of_workers, num_of_tasks, num_of_choices)
+    dei_wbt = np.add(np.multiply(prob_ans_wbt[0],ei_wbt[0]) + np.multiply(prob_ans_wbt[1],ei_wbt[1]))
+    return dei_wbt
 
 
 def synthetic_exp(max_number_of_workers, worker_arri_rate, expertise_init, num_of_tasks, difficulty_init, num_of_choices, confidence_init, threshold):
@@ -73,13 +75,13 @@ def synthetic_exp(max_number_of_workers, worker_arri_rate, expertise_init, num_o
 
         task_capacity = threshold - np.abs(infer_confidence[0]-infer_confidence[1]) #threshold can be vector or scala
 
-        calculate_dei(num_of_workers, num_of_tasks, num_of_choices, infer_expertise, infer_difficulty, infer_confidence)
 
 
         #start assignment
-            # calculate_dei(confidence of answer/expertise), generate worker answers
+            # calculate_dei(confidence of answer/expertise)
+        dei_wbt = calculate_dei(num_of_workers, num_of_tasks, num_of_choices, infer_expertise, infer_expertise_score,infer_difficulty, infer_confidence, infer_confidence_score)
             # assign_with_mode
-            #generate and store asnwers
+            #generate and store answers
         #end assignment
 
         #start inference
