@@ -196,11 +196,11 @@ second_iteration = 10
 # truth_inference(number_of_workers, 0.5, number_of_tasks, 0.5, number_of_choices)
 
 # for j in range(first_iteration):
-exp_difference = dif_difference = accuracy = 0
-for i in range(second_iteration):
-    res = truth_inference(number_of_workers, 0.5, number_of_tasks, 0.5, number_of_choices)
-    exp_difference += res[0]
-    dif_difference += res[1]
-    accuracy += res[2]
-    print "accuracy:", res[2]
-print exp_difference/second_iteration, "  ", dif_difference/second_iteration, " ", accuracy/second_iteration
+# exp_difference = dif_difference = accuracy = 0
+# for i in range(second_iteration):
+#     res = truth_inference(number_of_workers, 0.5, number_of_tasks, 0.5, number_of_choices)
+#     exp_difference += res[0]
+#     dif_difference += res[1]
+#     accuracy += res[2]
+#     print "accuracy:", res[2]
+# print exp_difference/second_iteration, "  ", dif_difference/second_iteration, " ", accuracy/second_iteration
