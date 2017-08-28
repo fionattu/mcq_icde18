@@ -11,7 +11,7 @@ def init(num_of_workers, expertise_init, num_of_tasks, difficulty_init):
 def start_inference():
     pass
 
-def assign_with_mode(assignment_mode="random", initial=True, capacity):
+def assign_with_mode(assignment_mode="random", initial=True):
     if assignment_mode is "random" and initial:
         # cold start
         pass
@@ -24,18 +24,26 @@ def assign_with_mode(assignment_mode="random", initial=True, capacity):
         pass
 
 
-def calculate_prob_ans(prob_ans_eq_truth, infer_confidence):
+def calculate_prob_ans_wbt(prob_ans_eq_truth_wbt, infer_confidence, num_of_workers, num_of_tasks, num_of_choices):
+    #check element of infer_confidence should be of 1 x tasks
+    prob_ans_neq_truth_wbt = (1 - prob_ans_eq_truth_wbt)/(num_of_choices - 1)
+    # worker selection probability
+    prob_ans_wbt = [np.zeros(num_of_workers, num_of_tasks) for _ in range(num_of_choices)]
+    prob_ans_wbt[0] = prob_ans_eq_truth_wbt * infer_confidence[0] + prob_ans_neq_truth_wbt * infer_confidence[1]
+    prob_ans_wbt[1] = prob_ans_neq_truth_wbt * infer_confidence[0] + prob_ans_eq_truth_wbt * infer_confidence[1]
 
+    return prob_ans_wbt
 
 
 def calculate_dei(num_of_workers, num_of_tasks, num_of_choices, infer_expertise, infer_difficulty, infer_confidence):
-    prob_ans_eq_truth = 1 / (1 + np.power(math.e, -3 * np.dot(np.transpose(infer_expertise), np.transpose(infer_difficulty))))
-    prob_ans = calculate_prob_ans(prob_ans_eq_truth, infer_confidence)
-    for i in range(num_of_workers):
-        for j in range(num_of_tasks):
-            dei = 0
-            for k in range(num_of_choices):
-                dei += (prob_ans * ei)
+    prob_ans_eq_truth_wbt = 1 / (1 + np.power(math.e, -3 * np.dot(np.transpose(infer_expertise), np.transpose(infer_difficulty))))
+    prob_ans_wbt = calculate_prob_ans_wbt(prob_ans_eq_truth_wbt, infer_confidence, num_of_workers, num_of_tasks, num_of_choices)
+
+    # for i in range(num_of_workers):
+    #     for j in range(num_of_tasks):
+    #         dei = 0
+    #         for k in range(num_of_choices):
+    #             dei += (prob_ans * ei)
 
 
 def synthetic_exp(max_number_of_workers, worker_arri_rate, expertise_init, num_of_tasks, difficulty_init, num_of_choices, confidence_init, threshold):
