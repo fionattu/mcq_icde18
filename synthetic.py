@@ -2,6 +2,18 @@ from truthfinder import *
 import numpy as np
 
 # worker selection probability is different from the truthfinder similation
+#start assignment
+    # calculate_dei(confidence of answer/expertise)
+    # assign_with_mode
+    #generate and store answers
+#end assignment
+
+#to do:
+# 1. check completed tasks (pre-scan, stop assign them to workers)
+# 2. cold start workers/tasks, old workers/tasks: last batch paras, new workers/tasks: initialized
+# 3. consider task processing time, construct a available worker set
+# 4. check workers that have done all tasks(can be implemented with 3)
+
 max_number_of_workers = 50
 
 
@@ -21,23 +33,30 @@ def check_assignment(worker, task, assign_scheme_tbw):
 
 
 def full_assign(worker, num_of_tasks, assign_scheme_tbw):
+    assigned_task = []
+    num_of_assign = 0
     for i in range(num_of_tasks):
-        if check_assignment(worker, i, assign_scheme_tbw) is False:
-            return False
+        if check_assignment(worker, i, assign_scheme_tbw) is True:
+            assigned_task.append(i)
+            num_of_assign += 1
+    if num_of_assign == num_of_tasks:
+        return [True, assigned_task]
+    else:
+        return [False, assigned_task]
 
-    return True
+
+def generate_random_task(worker, num_of_tasks, assign_scheme_tbw, completed_tasks, assigned_tasks):
+    worker_ban_task_list = completed_tasks + assign_scheme_tbw
+    return np.random.choice([i for i in range(0, num_of_tasks) if i not in worker_ban_task_list])
 
 
-def select_task(worker, num_of_tasks, assign_scheme_tbw):
-    if full_assign(worker, num_of_tasks, assign_scheme_tbw) is True:
+def select_task(worker, num_of_tasks, assign_scheme_tbw, completed_tasks):
+    [full, assigned_tasks] = full_assign(worker, num_of_tasks, assign_scheme_tbw)
+    if full is True:
         return -1
     else:
-        task = np.random.randint(0, num_of_tasks) #low inclusive, high exclusive
-        while(True):
-            if check_assignment(worker, task, assign_scheme_tbw) is True:
-                task = uniform_random_generator(0, num_of_tasks)
-            else:
-                return task
+        task = generate_random_task(worker, num_of_tasks, assign_scheme_tbw, completed_tasks, assigned_tasks)
+        return task
 
 
 def generate_answer(worker, task, prob_ans_wbt): # check normalization is needed?
@@ -47,19 +66,19 @@ def generate_answer(worker, task, prob_ans_wbt): # check normalization is needed
         return 1
 
 
-def random_assign(num_of_workers, num_of_tasks, prob_ans_wbt, assign_scheme_tbw): #available worker set
+def random_assign(num_of_workers, num_of_tasks, prob_ans_wbt, assign_scheme_tbw, completed_tasks): #available worker set
     for i in range(num_of_workers):
-        task = select_task(i, num_of_tasks, assign_scheme_tbw)
+        task = select_task(i, num_of_tasks, assign_scheme_tbw, completed_tasks)
         if task is not -1:
             choice = generate_answer(i, task, prob_ans_wbt) # check whether assignment_scheme_tbw is updated
             assign_scheme_tbw[choice][task][i] = 1
         else:
-            pass #this worker has completed all tasks
+            pass #this worker has completed all tasks, do not assign any task
 
 
-def assign_with_mode(assign_mode, num_of_workers, num_of_tasks, task_capacity, dei_wbt, prob_ans_wbt, assign_scheme_tbw): # cold start
+def assign_with_mode(assign_mode, num_of_workers, num_of_tasks, task_capacity, dei_wbt, prob_ans_wbt, assign_scheme_tbw, completed_tasks): # cold start
     if assign_mode is "random":
-        random_assign(num_of_workers, num_of_tasks, prob_ans_wbt, assign_scheme_tbw)
+        random_assign(num_of_workers, num_of_tasks, dei_wbt, prob_ans_wbt, assign_scheme_tbw, completed_tasks)
 
     elif assign_mode is "baseline":
         pass
@@ -158,48 +177,38 @@ def start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_
     return [expertise, expertise_score, confidence, confidence_score, difficulty, difficulty_score] #check whether local can return  
 
 
-def label_completed_tasks(completed_tasks, infer_confidence):
-    pass
+def check_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, completed_tasks):
+    for i in num_of_tasks:
+        if i not in completed_tasks and infer_difficulty_score[i] >= threshold:
+            completed_tasks.append(i)
 
 
 def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_tasks, num_of_choices, expertise_init, difficulty_init, confidence_init, threshold):
-    num_of_return_answers = 0
     num_of_workers = 0
-    infer_expertise = [expertise_init] * max_number_of_workers
+    infer_expertise = []
+    infer_expertise_score = []
     infer_confidence = [[confidence_init] * num_of_tasks for _ in range(num_of_choices)]
+    infer_confidence_score = [ np.zeros(1, num_of_tasks) for _ in range(num_of_choices)]
     infer_difficulty = [difficulty_init] * num_of_tasks
+    infer_difficulty_score = np.zeros(1, num_of_tasks)
     assign_scheme_tbw = [np.zeros(num_of_tasks, max_number_of_workers) for _ in range(num_of_choices)] # assignmnet scheme
-    dei_wbt = np.zeros(max_number_of_workers, num_of_tasks)
-    task_capacity = np.zeros(num_of_tasks)
     truths = tasks_generator(num_of_tasks, num_of_choices) # 1 x tasks
-    completed_tasks = np.zeros(num_of_tasks)
-    while(num_of_return_answers < num_of_tasks): #begin a batch
-        infer_expertise[0:num_of_workers-1] = expertise
-        infer_confidence = confidence
-        infer_difficulty = difficulty
+    completed_tasks = []
+    while(len(completed_tasks) < num_of_tasks): #begin a batch, old workers/tasks: last batch paras, new workers/tasks: initialized
+        check_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, completed_tasks) # check whether completed tasks are updated
         num_of_workers += worker_arri_rate if num_of_workers < max_number_of_workers else 1
+        infer_expertise = infer_expertise + [expertise_init] * worker_arri_rate
+        infer_expertise_score = infer_expertise_score + [-np.log(1-expertise_init)] * worker_arri_rate
         estimated_difficulty_score = np.abs(infer_confidence[0] - infer_confidence[1])
         task_capacity = threshold - estimated_difficulty_score #threshold can be vector or scala
-        [dei_wbt, prob_ans_wbt] = calculate_dei(num_of_workers, num_of_tasks, num_of_choices, infer_expertise, infer_expertise_score, infer_difficulty, estimated_difficulty_score, infer_confidence, infer_confidence_score)
-        # consider task processing time, should add an available worker set, check whether assign_scheme_tbw is changed
-        assign_with_mode(assign_mode, num_of_workers, num_of_tasks, task_capacity, dei_wbt, prob_ans_wbt, assign_scheme_tbw) # assign_scheme_tbw includes the answers
-        
-        #start assignment
-            # calculate_dei(confidence of answer/expertise)
+        [dei_wbt, prob_ans_wbt] = calculate_dei(num_of_workers, num_of_tasks, num_of_choices, infer_expertise, infer_expertise_score,
+                                                infer_difficulty, estimated_difficulty_score, infer_confidence, infer_confidence_score)
 
-            # assign_with_mode
-            #generate and store answers
-        #end assignment
+        # consider task processing time, should add an available worker set, check whether assign_scheme_tbw is changed
+        assign_with_mode(assign_mode, num_of_workers, num_of_tasks, task_capacity, dei_wbt, prob_ans_wbt, assign_scheme_tbw, completed_tasks) # assign_scheme_tbw includes the answers
 
         #start inference return model paras
-        [infer_expertise, infer_expertise_score, infer_confidence, infer_confidence_score, infer_difficulty,infer_difficulty_score] = start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_tbw,expertise_init, difficulty_init)
-        label_completed_tasks(completed_tasks, infer_confidence) #if certain, stop assign
-            # return certain answer (num_of_return_answers = num_of_return_answers + 1)
-        #end inference
-
-
-
-
+        [infer_expertise, infer_expertise_score, infer_confidence, infer_confidence_score, infer_difficulty, infer_difficulty_score] = start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_tbw,expertise_init, difficulty_init)
 
 
 
