@@ -121,7 +121,8 @@ def calculate_ei(infer_confidence_score, infer_confidence, infer_expertise_score
 
 def calculate_dei(num_of_workers, num_of_tasks, num_of_choices, infer_expertise, infer_expertise_score, infer_difficulty, estimated_difficulty_score, infer_confidence, infer_confidence_score):
     # infer_confidence_score is 2 x tasks, infer_expertise_score is 1 x workers
-    prob_ans_eq_truth_wbt = 1 / (1 + np.power(math.e, -3 * np.dot(np.transpose(infer_expertise), np.transpose(infer_difficulty))))
+    prob = np.transpose(np.multiply(np.asarray(infer_expertise), np.asarray(infer_difficulty)[:, None]))
+    prob_ans_eq_truth_wbt = 1 / (1 + np.power(math.e, -3 * prob))
     prob_ans_wbt = calculate_prob_ans_wbt(prob_ans_eq_truth_wbt, infer_confidence, num_of_workers, num_of_tasks, num_of_choices)
     ei_wbt = calculate_ei(infer_confidence_score, infer_confidence, infer_expertise_score, infer_difficulty, estimated_difficulty_score, num_of_workers, num_of_tasks, num_of_choices)
     dei_wbt = np.abs(np.add(np.multiply(prob_ans_wbt[0],ei_wbt[0]) + np.multiply(prob_ans_wbt[1],ei_wbt[1]))) # should be abs
