@@ -45,11 +45,8 @@ def full_assign(worker, num_of_tasks, assign_scheme_tbw):
         return [False, assigned_task]
 
 
-def generate_random_task(worker, num_of_tasks, assign_scheme_tbw, completed_tasks, assigned_tasks):
+def generate_random_task(num_of_tasks, completed_tasks, assigned_tasks):
     worker_ban_task_list = completed_tasks + assigned_tasks
-    print worker_ban_task_list
-    a= [i for i in range(0, num_of_tasks) if i not in worker_ban_task_list].any()
-    print a
     return np.random.choice([i for i in range(0, num_of_tasks) if i not in worker_ban_task_list])
 
 
@@ -58,7 +55,7 @@ def select_task(worker, num_of_tasks, assign_scheme_tbw, completed_tasks):
     if full is True:
         return -1
     else:
-        task = generate_random_task(num_of_tasks, assign_scheme_tbw, completed_tasks, assigned_tasks)
+        task = generate_random_task(num_of_tasks, completed_tasks, assigned_tasks)
         return task
 
 
@@ -196,7 +193,7 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
     infer_confidence_score = [ np.zeros(num_of_tasks) for _ in range(num_of_choices)]
     infer_difficulty = [difficulty_init] * num_of_tasks
     infer_difficulty_score = np.zeros(num_of_tasks)
-    assign_scheme_tbw = [np.zeros((num_of_tasks, max_number_of_workers)) for _ in range(num_of_choices)] # assignmnet scheme
+    assign_scheme_tbw = [[] for _ in range(num_of_choices)] # assignmnet scheme
     truths = tasks_generator(num_of_tasks, num_of_choices) # 1 x tasks
     completed_tasks = []
     while(len(completed_tasks) < num_of_tasks): #begin a batch, old workers/tasks: last batch paras, new workers/tasks: initialized
@@ -204,6 +201,10 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
         num_of_workers += worker_arri_rate if num_of_workers < max_number_of_workers else 1
         infer_expertise = infer_expertise + [expertise_init] * worker_arri_rate
         infer_expertise_score = infer_expertise_score + [-np.log(1-expertise_init)] * worker_arri_rate
+        print assign_scheme_tbw[0]
+        print np.zeros((num_of_tasks, num_of_workers))
+        assign_scheme_tbw[0] = [assign_scheme_tbw[0] + np.zeros(num_of_tasks, num_of_workers)]
+        print assign_scheme_tbw[0]
         estimated_difficulty_score = np.abs(np.subtract(np.asarray(infer_confidence[0]), np.asarray(infer_confidence[1])))
         task_capacity = threshold - estimated_difficulty_score #threshold can be vector or scala
         [dei_wbt, prob_ans_wbt] = calculate_dei(num_of_workers, num_of_tasks, num_of_choices, infer_expertise, infer_expertise_score,
