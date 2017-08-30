@@ -109,6 +109,10 @@ def calculate_ei(infer_confidence_score, infer_confidence, infer_expertise_score
     updated_confidence = [np.zeros((num_of_workers, num_of_tasks)) for _ in range(num_of_choices)]
     updated_difficulty_score = [np.zeros((num_of_workers, num_of_tasks)) for _ in range(num_of_choices)]
     for i in range(num_of_choices):
+        # print np.asarray([infer_confidence_score[i],] * num_of_workers)
+        # print ""
+        # print np.asarray(infer_expertise_score)[:,None]
+
         updated_confidence_score[i] = np.add(np.asarray([infer_confidence_score[i],] * num_of_workers),np.asarray(infer_expertise_score)[:,None]) # wbt # have to add dampen factors
         updated_confidence[i] = (1/(1 + np.power(math.e, -updated_confidence_score[i]))) * np.asarray(infer_difficulty) #make sure the infer/update confidence have the same difficulties
         if i is 0:
@@ -144,8 +148,8 @@ def start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_
             confidence_score_damping = np.zeros((num_of_choices, num_of_tasks))
             confidence = np.zeros((num_of_choices, num_of_tasks))
 
-            confidence_score_damping[0][:] = confidence_score[0][:] - 1 * confidence_score[1][:];
-            confidence_score_damping[1][:] = confidence_score[1][:] - 1 * confidence_score[0][:];
+            confidence_score_damping[0][:] = confidence_score[0][:] - 1 * confidence_score[1][:]
+            confidence_score_damping[1][:] = confidence_score[1][:] - 1 * confidence_score[0][:]
 
             for task in range(num_of_tasks):
                 for choice in range(num_of_choices):
@@ -193,18 +197,17 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
     infer_confidence_score = [ np.zeros(num_of_tasks) for _ in range(num_of_choices)]
     infer_difficulty = [difficulty_init] * num_of_tasks
     infer_difficulty_score = np.zeros(num_of_tasks)
-    assign_scheme_tbw = [[] for _ in range(num_of_choices)] # assignmnet scheme
     truths = tasks_generator(num_of_tasks, num_of_choices) # 1 x tasks
     completed_tasks = []
     while(len(completed_tasks) < num_of_tasks): #begin a batch, old workers/tasks: last batch paras, new workers/tasks: initialized
         check_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, completed_tasks) # check whether completed tasks are updated
         num_of_workers += worker_arri_rate if num_of_workers < max_number_of_workers else 1
+        if num_of_workers == worker_arri_rate:
+            assign_scheme_tbw = [np.zeros((num_of_tasks, num_of_workers)) for _ in range(num_of_choices)]  # assignmnet scheme
+        else:
+            assign_scheme_tbw = [np.hstack((assign_scheme_tbw[i], np.zeros((num_of_tasks, worker_arri_rate)))) for i in range(num_of_choices)]
         infer_expertise = infer_expertise + [expertise_init] * worker_arri_rate
         infer_expertise_score = infer_expertise_score + [-np.log(1-expertise_init)] * worker_arri_rate
-        print assign_scheme_tbw[0]
-        print np.zeros((num_of_tasks, num_of_workers))
-        assign_scheme_tbw[0] = [assign_scheme_tbw[0] + np.zeros(num_of_tasks, num_of_workers)]
-        print assign_scheme_tbw[0]
         estimated_difficulty_score = np.abs(np.subtract(np.asarray(infer_confidence[0]), np.asarray(infer_confidence[1])))
         task_capacity = threshold - estimated_difficulty_score #threshold can be vector or scala
         [dei_wbt, prob_ans_wbt] = calculate_dei(num_of_workers, num_of_tasks, num_of_choices, infer_expertise, infer_expertise_score,
