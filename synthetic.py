@@ -1,6 +1,7 @@
 from truthfinder import *
 import numpy as np
 
+
 # worker selection probability is different from the truthfinder similation
 #start assignment
     # calculate_dei(confidence of answer/expertise)
@@ -45,7 +46,10 @@ def full_assign(worker, num_of_tasks, assign_scheme_tbw):
 
 
 def generate_random_task(worker, num_of_tasks, assign_scheme_tbw, completed_tasks, assigned_tasks):
-    worker_ban_task_list = completed_tasks + assign_scheme_tbw
+    worker_ban_task_list = completed_tasks + assigned_tasks
+    print worker_ban_task_list
+    a= [i for i in range(0, num_of_tasks) if i not in worker_ban_task_list].any()
+    print a
     return np.random.choice([i for i in range(0, num_of_tasks) if i not in worker_ban_task_list])
 
 
@@ -54,7 +58,7 @@ def select_task(worker, num_of_tasks, assign_scheme_tbw, completed_tasks):
     if full is True:
         return -1
     else:
-        task = generate_random_task(worker, num_of_tasks, assign_scheme_tbw, completed_tasks, assigned_tasks)
+        task = generate_random_task(num_of_tasks, assign_scheme_tbw, completed_tasks, assigned_tasks)
         return task
 
 
@@ -65,7 +69,7 @@ def generate_answer(worker, task, prob_ans_wbt): # check normalization is needed
         return 1
 
 
-def random_assign(num_of_workers, num_of_tasks, prob_ans_wbt, assign_scheme_tbw, completed_tasks): #available worker set
+def random_assign(num_of_workers, num_of_tasks, dei_wbt, prob_ans_wbt, assign_scheme_tbw, completed_tasks): #available worker set
     for i in range(num_of_workers):
         task = select_task(i, num_of_tasks, assign_scheme_tbw, completed_tasks)
         if task is not -1:
@@ -108,14 +112,15 @@ def calculate_ei(infer_confidence_score, infer_confidence, infer_expertise_score
     updated_confidence = [np.zeros((num_of_workers, num_of_tasks)) for _ in range(num_of_choices)]
     updated_difficulty_score = [np.zeros((num_of_workers, num_of_tasks)) for _ in range(num_of_choices)]
     for i in range(num_of_choices):
-        updated_confidence_score[i] = np.add([[infer_confidence_score[i]],] * num_of_workers, np.transpose(infer_expertise_score)) # have to add dampen factors
+        updated_confidence_score[i] = np.add(np.asarray([infer_confidence_score[i],] * num_of_workers),np.asarray(infer_expertise_score)[:,None]) # wbt # have to add dampen factors
         updated_confidence[i] = (1/(1 + np.power(math.e, -updated_confidence_score[i]))) * np.asarray(infer_difficulty) #make sure the infer/update confidence have the same difficulties
         if i is 0:
-            updated_difficulty_score[i] = np.abs(np.subtract(updated_confidence[i] - infer_confidence[1]))
+            a=  np.asarray(updated_confidence[i]) - np.asarray(infer_confidence[1])
+            updated_difficulty_score[i] = np.abs(np.subtract(np.asarray(updated_confidence[i]),np.asarray(infer_confidence[1])))
         elif i is 1:
-            updated_difficulty_score[i] = np.abs(np.subtract(updated_confidence[i] - infer_confidence[0]))
+            updated_difficulty_score[i] = np.abs(np.subtract(updated_confidence[i],infer_confidence[0]))
 
-        ei_wbt[i] = np.subtract(updated_difficulty_score[i] - estimated_difficulty_score)
+        ei_wbt[i] = np.subtract(updated_difficulty_score[i],estimated_difficulty_score)
     return ei_wbt
 
 
@@ -125,7 +130,7 @@ def calculate_dei(num_of_workers, num_of_tasks, num_of_choices, infer_expertise,
     prob_ans_eq_truth_wbt = 1 / (1 + np.power(math.e, -3 * prob))
     prob_ans_wbt = calculate_prob_ans_wbt(prob_ans_eq_truth_wbt, infer_confidence, num_of_workers, num_of_tasks, num_of_choices)
     ei_wbt = calculate_ei(infer_confidence_score, infer_confidence, infer_expertise_score, infer_difficulty, estimated_difficulty_score, num_of_workers, num_of_tasks, num_of_choices)
-    dei_wbt = np.abs(np.add(np.multiply(prob_ans_wbt[0],ei_wbt[0]) + np.multiply(prob_ans_wbt[1],ei_wbt[1]))) # should be abs
+    dei_wbt = np.abs(np.add(np.multiply(prob_ans_wbt[0],ei_wbt[0]),np.multiply(prob_ans_wbt[1],ei_wbt[1]))) # should be abs
     return [dei_wbt, prob_ans_wbt]
 
 
