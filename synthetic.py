@@ -47,6 +47,8 @@ def full_assign(worker, num_of_tasks, assign_scheme_tbw):
 
 def generate_random_task(num_of_tasks, completed_tasks, assigned_tasks):
     worker_ban_task_list = completed_tasks + assigned_tasks
+    if len(worker_ban_task_list) == num_of_tasks
+    print worker_ban_task_list
     return np.random.choice([i for i in range(0, num_of_tasks) if i not in worker_ban_task_list])
 
 
@@ -109,11 +111,7 @@ def calculate_ei(infer_confidence_score, infer_confidence, infer_expertise_score
     updated_confidence = [np.zeros((num_of_workers, num_of_tasks)) for _ in range(num_of_choices)]
     updated_difficulty_score = [np.zeros((num_of_workers, num_of_tasks)) for _ in range(num_of_choices)]
     for i in range(num_of_choices):
-        # print np.asarray([infer_confidence_score[i],] * num_of_workers)
-        # print ""
-        # print np.asarray(infer_expertise_score)[:,None]
-
-        updated_confidence_score[i] = np.add(np.asarray([infer_confidence_score[i],] * num_of_workers),np.asarray(infer_expertise_score)[:,None]) # wbt # have to add dampen factors
+        updated_confidence_score[i] = np.add(np.asarray([infer_confidence_score[i],] * num_of_workers), np.asarray(infer_expertise_score)[:,None]) # wbt # have to add dampen factors
         updated_confidence[i] = (1/(1 + np.power(math.e, -updated_confidence_score[i]))) * np.asarray(infer_difficulty) #make sure the infer/update confidence have the same difficulties
         if i is 0:
             a=  np.asarray(updated_confidence[i]) - np.asarray(infer_confidence[1])
@@ -201,7 +199,8 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
     completed_tasks = []
     while(len(completed_tasks) < num_of_tasks): #begin a batch, old workers/tasks: last batch paras, new workers/tasks: initialized
         check_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, completed_tasks) # check whether completed tasks are updated
-        num_of_workers += worker_arri_rate if num_of_workers < max_number_of_workers else 1
+        # num_of_workers += worker_arri_rate if num_of_workers < max_number_of_workers else 1 # control the max numer of workers
+        num_of_workers += worker_arri_rate
         if num_of_workers == worker_arri_rate:
             assign_scheme_tbw = [np.zeros((num_of_tasks, num_of_workers)) for _ in range(num_of_choices)]  # assignmnet scheme
         else:
