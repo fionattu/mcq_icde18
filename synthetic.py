@@ -88,10 +88,11 @@ def prescan(num_of_workers, num_of_tasks, task_capacity, dei_wbt, prob_ans_wbt, 
         min_worker = 0
         for j in range(1, num_of_workers):
             current = remain_capacity_wbt[j][i]
-            if 0 >= current > min:
-                min  = current
-                min_worker = j
-        if min < 0: #assign task i to min_worker
+            if current <= 0:
+                if min > 0 or (min < 0 and min < current): #have to check
+                    min = current
+                    min_worker = j
+        if min <= 0:        #assign task i to min_worker
             choice = generate_answer(min_worker,i,prob_ans_wbt)
             assign_scheme_tbw[choice][i][min_worker] = 1
             available_workers.pop(min_worker)
@@ -100,9 +101,42 @@ def prescan(num_of_workers, num_of_tasks, task_capacity, dei_wbt, prob_ans_wbt, 
     return available_workers
 
 
+def assign_first_open(num_of_workers, num_of_tasks, remain_capacity_wbt, prob_ans_wbt, assign_scheme_tbw, completed_tasks, available_workers, open_tasks):
+    min_task = ""
+    min_worker = ""
+    min_dei = 10000
+    for w in range(num_of_workers):
+        for t in range(num_of_tasks):
+            current = remain_capacity_wbt[w][t]
+            if w in available_workers and t not in completed_tasks and current < min_dei:
+                min_dei = current
+                min_worker = w
+                min_task = t
+    choice = generate_answer(min_worker, min_task, prob_ans_wbt)
+    assign_scheme_tbw[choice][min_task][min_worker] = 1
+    open_tasks.append(min_task)
+    available_workers.pop(min_worker)
+    return [min_task, remain_capacity_wbt[min_worker][min_task]]
+
+
+def update_dei(task, reduced_dei, dei_wbt):
+    dei_wbt[:,task] = dei_wbt[:,task] - [reduced_dei] #have to check
+
+
+def start_first_fit(num_of_workers, num_of_tasks, task_capacity, dei_wbt, prob_ans_wbt, assign_scheme_tbw, completed_tasks, available_workers):
+    remain_capacity_wbt = np.subtract(task_capacity, dei_wbt) # after prescan, available_worker have "positive" dei over all non-completed tasks
+    open_tasks = []
+    [first_task, reduced_dei] = assign_first_open(num_of_workers, num_of_tasks, remain_capacity_wbt, prob_ans_wbt, assign_scheme_tbw, completed_tasks, available_workers, open_tasks)
+    update_dei(first_task, reduced_dei, dei_wbt)
+    for w in available_workers:
+        for t in range(num_of_tasks):
+
+
+
 def first_fit_greedy(num_of_workers, num_of_tasks, task_capacity, dei_wbt, prob_ans_wbt, assign_scheme_tbw,completed_tasks):
     available_workers = prescan(num_of_workers, num_of_tasks, task_capacity, dei_wbt, prob_ans_wbt, assign_scheme_tbw,completed_tasks)
-
+    start_first_fit(num_of_workers, num_of_tasks, task_capacity, dei_wbt, prob_ans_wbt, assign_scheme_tbw, completed_tasks, available_workers)
+    print ""
 
 def best_fit_greedy(num_of_workers, num_of_tasks, task_capacity, dei_wbt, prob_ans_wbt, assign_scheme_tbw,completed_tasks):
     prescan(num_of_workers, num_of_tasks, task_capacity, dei_wbt, assign_scheme_tbw, completed_tasks)
@@ -266,7 +300,7 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
     print_accuracy(num_of_tasks, truths, infer_truths)
 
 
-num_of_tasks = 10
+num_of_tasks = 2
 worker_arri_rate = 5
 num_of_choices = 2
 threshold = 0.8
