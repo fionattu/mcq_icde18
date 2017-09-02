@@ -239,11 +239,15 @@ def calculate_ei(infer_confidence_score, infer_confidence, infer_expertise_score
     #infer_expertise_score and infer_difficulty are "1 x tasks"
     ei_wbt = [np.zeros((num_of_workers, num_of_tasks)) for _ in range(num_of_choices)]
     updated_confidence_score = [np.zeros((num_of_workers, num_of_tasks)) for _ in range(num_of_choices)]
+    updated_dampen_confidence_score = [np.zeros((num_of_workers, num_of_tasks)) for _ in range(num_of_choices)]
     updated_confidence = [np.zeros((num_of_workers, num_of_tasks)) for _ in range(num_of_choices)]
     updated_difficulty_score = [np.zeros((num_of_workers, num_of_tasks)) for _ in range(num_of_choices)]
     for i in range(num_of_choices):
         updated_confidence_score[i] = np.add(np.asarray([infer_confidence_score[i],] * num_of_workers), np.asarray(infer_expertise_score)[:,None]) # wbt # have to add dampen factors
-        updated_confidence[i] = (1/(1 + np.power(math.e, -updated_confidence_score[i]))) * np.asarray(infer_difficulty) #make sure the infer/update confidence have the same difficulties
+    updated_dampen_confidence_score[0] = updated_confidence_score[0] - updated_confidence_score[1]
+    updated_dampen_confidence_score[1] = updated_confidence_score[1] - updated_confidence_score[0]
+    for i in range(num_of_choices):
+        updated_confidence[i] = (1/(1 + np.power(math.e, -updated_dampen_confidence_score[i]))) * np.asarray(infer_difficulty) #make sure the infer/update confidence have the same difficulties
         if i is 0:
             a=  np.asarray(updated_confidence[i]) - np.asarray(infer_confidence[1])
             updated_difficulty_score[i] = np.abs(np.subtract(np.asarray(updated_confidence[i]),np.asarray(infer_confidence[1])))
