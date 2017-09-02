@@ -32,11 +32,11 @@ def check_assignment(worker, task, assign_scheme_tbw):
         return False
 
 
-def full_assign(worker, num_of_tasks, assign_scheme_tbw):
-    assigned_task = []
-    num_of_assign = 0
+def full_assign(worker, num_of_tasks, assign_scheme_tbw,completed_tasks):
+    assigned_task = completed_tasks
+    num_of_assign = len(assigned_task)
     for i in range(num_of_tasks):
-        if check_assignment(worker, i, assign_scheme_tbw) is True:
+        if i not in assigned_task and check_assignment(worker, i, assign_scheme_tbw) is True:
             assigned_task.append(i)
             num_of_assign += 1
     if num_of_assign == num_of_tasks:
@@ -47,13 +47,15 @@ def full_assign(worker, num_of_tasks, assign_scheme_tbw):
 
 def generate_random_task(num_of_tasks, completed_tasks, assigned_tasks):
     worker_ban_task_list = completed_tasks + assigned_tasks
-    if len(worker_ban_task_list) == num_of_tasks
-    print worker_ban_task_list
+    # print "worker ban list: ", worker_ban_task_list
+    a = np.random.choice([i for i in range(0, num_of_tasks) if i not in worker_ban_task_list])
+    # print "gen:", a
     return np.random.choice([i for i in range(0, num_of_tasks) if i not in worker_ban_task_list])
 
 
 def select_task(worker, num_of_tasks, assign_scheme_tbw, completed_tasks):
-    [full, assigned_tasks] = full_assign(worker, num_of_tasks, assign_scheme_tbw)
+    # print "current completed tasks: ", completed_tasks
+    [full, assigned_tasks] = full_assign(worker, num_of_tasks, assign_scheme_tbw,completed_tasks)
     if full is True:
         return -1
     else:
@@ -70,17 +72,20 @@ def generate_answer(worker, task, prob_ans_wbt): # check normalization is needed
 
 def random_assign(num_of_workers, num_of_tasks, dei_wbt, prob_ans_wbt, assign_scheme_tbw, completed_tasks): #available worker set
     for i in range(num_of_workers):
+        # print "assigning worker:", i
         task = select_task(i, num_of_tasks, assign_scheme_tbw, completed_tasks)
+        # print "assign worker:", i, " task ", task
         if task is not -1:
             choice = generate_answer(i, task, prob_ans_wbt) # check whether assignment_scheme_tbw is updated
             assign_scheme_tbw[choice][task][i] = 1
         else:
-            pass #this worker has completed all tasks, do not assign any task
+            pass #this worker has completed all avialable tasks, do not assign any task
 
 
 def assign_with_mode(assign_mode, num_of_workers, num_of_tasks, task_capacity, dei_wbt, prob_ans_wbt, assign_scheme_tbw, completed_tasks): # cold start
     if assign_mode is "random":
         random_assign(num_of_workers, num_of_tasks, dei_wbt, prob_ans_wbt, assign_scheme_tbw, completed_tasks)
+        # print assign_scheme_tbw
 
     elif assign_mode is "baseline":
         pass
@@ -178,7 +183,7 @@ def start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_
                 for choice in range(num_of_choices):
                     expertise[x] += assign_scheme_tbw[choice][task][x] * confidence[choice][task]
         expertise = [x / num_of_tasks for x in expertise]
-    return [expertise, expertise_score, confidence, confidence_score, difficulty, difficulty_score] #check whether local can return  
+    return [expertise, expertise_score, confidence, confidence_score, difficulty, difficulty_score] #check whether local can return
 
 
 def check_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, completed_tasks):
@@ -197,7 +202,9 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
     infer_difficulty_score = np.zeros(num_of_tasks)
     truths = tasks_generator(num_of_tasks, num_of_choices) # 1 x tasks
     completed_tasks = []
+    time = 0
     while(len(completed_tasks) < num_of_tasks): #begin a batch, old workers/tasks: last batch paras, new workers/tasks: initialized
+        # print "len of completed: ", completed_tasks
         check_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, completed_tasks) # check whether completed tasks are updated
         # num_of_workers += worker_arri_rate if num_of_workers < max_number_of_workers else 1 # control the max numer of workers
         num_of_workers += worker_arri_rate
@@ -205,6 +212,7 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
             assign_scheme_tbw = [np.zeros((num_of_tasks, num_of_workers)) for _ in range(num_of_choices)]  # assignmnet scheme
         else:
             assign_scheme_tbw = [np.hstack((assign_scheme_tbw[i], np.zeros((num_of_tasks, worker_arri_rate)))) for i in range(num_of_choices)]
+
         infer_expertise = infer_expertise + [expertise_init] * worker_arri_rate
         infer_expertise_score = infer_expertise_score + [-np.log(1-expertise_init)] * worker_arri_rate
         estimated_difficulty_score = np.abs(np.subtract(np.asarray(infer_confidence[0]), np.asarray(infer_confidence[1])))
@@ -217,6 +225,9 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
 
         #start inference return model paras
         [infer_expertise, infer_expertise_score, infer_confidence, infer_confidence_score, infer_difficulty, infer_difficulty_score] = start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_tbw,expertise_init, difficulty_init)
+
+        time += 1
+    print "total time:", time
 
 
 
