@@ -24,7 +24,7 @@ def init(num_of_workers, expertise_init, num_of_tasks, difficulty_init):
 
 
 def check_assignment(worker, task, assign_scheme_tbw):
-    if assign_scheme_tbw[0][task][worker] is 1 or assign_scheme_tbw[1][task][worker] is 1:
+    if assign_scheme_tbw[0][task][worker] == 1 or assign_scheme_tbw[1][task][worker] == 1:
         return True
     else:
         return False
@@ -53,7 +53,10 @@ def select_task(worker, num_of_tasks, assign_scheme_tbw, completed_tasks):
     if full is True:
         return -1
     else:
+        print ""
+        print "worker", worker, "assigned:", assigned_tasks
         task = generate_random_task(num_of_tasks, completed_tasks, assigned_tasks)
+        print "task in assign", task in assigned_tasks
         return task
 
 
@@ -73,12 +76,12 @@ def random_assign(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_tb
     for i in range(num_of_workers):
         task = select_task(i, num_of_tasks, assign_scheme_tbw, completed_tasks)
         print "assign worker ", i, " task ", task
-        if task is not -1:
+        if task != -1:
             choice = generate_answer(i, task, num_of_choices, truths, expertise_truths, difficulty_truths) # check whether assignment_scheme_tbw is updated
             assign_scheme_tbw[choice][task][i] = 1
-        else:
-            #this worker has completed all avialable tasks, do not assign any task
-            pass
+        # else:
+        #     #this worker has completed all avialable tasks, do not assign any task
+        #     pass
 
 
 def prescan(num_of_workers, num_of_tasks, num_of_choices, task_capacity, dei_wbt, assign_scheme_tbw, completed_tasks, truths, expertise_truths, difficulty_truths): # label completed tasks
@@ -359,10 +362,10 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
     while(len(completed_tasks) < num_of_tasks): #begin a batch, old workers/tasks: last batch paras, new workers/tasks: initialized
         # print #completed tasks as the potentially completed questions
         # num_of_workers += worker_arri_rate if num_of_workers < max_number_of_workers else 1 # control the max numer of workers
-        print "_________________________iteration_________________________: ", time
-        process_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, infer_confidence, completed_tasks,infer_truths)  # check whether completed tasks are updated
-        print "_________________________completed tasks after processing:", completed_tasks
-        print "_________________________#completes: ", len(completed_tasks)
+        # print "_________________________iteration_________________________: ", time
+        # process_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, infer_confidence, completed_tasks,infer_truths)  # check whether completed tasks are updated
+        # print "_________________________completed tasks after processing:", completed_tasks
+        # print "_________________________#completes: ", len(completed_tasks)
         num_of_workers += worker_arri_rate
         if num_of_workers == worker_arri_rate:
             assign_scheme_tbw = [np.zeros((num_of_tasks, num_of_workers)) for _ in range(num_of_choices)]  # assignmnet scheme
@@ -381,8 +384,11 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
         # consider task processing time, should add an available worker set, check whether assign_scheme_tbw is changed
         assign_with_mode(assign_mode, num_of_workers, num_of_tasks, num_of_choices, task_capacity, dei_wbt, assign_scheme_tbw, completed_tasks, truths, expertise_truths, difficulty_truths) # assign_scheme_tbw includes the answers
         [infer_expertise, infer_expertise_score, infer_confidence, infer_confidence_score, infer_difficulty, infer_difficulty_score] = start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_tbw,expertise_init, difficulty_init)
-        # process_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, infer_confidence, completed_tasks, infer_truths)  # check whether completed tasks are updated
-        # print "process completed:", completed_tasks
+        print "_________________________iteration_________________________: ", time
+        process_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, infer_confidence, completed_tasks,
+                                infer_truths)  # check whether completed tasks are updated
+        print "_________________________completed tasks after processing:", completed_tasks
+        print "_________________________#completes: ", len(completed_tasks)
         time += 1
     return [print_accuracy(num_of_tasks, truths, infer_truths), time]
 
@@ -410,6 +416,6 @@ def main(assign_mode):
     print " accuracy: ", 100*float(accuracy_ff)/(iteration * num_of_tasks), "%"
     print " time: ", float(time_ff)/iteration
 
-main("random")
+main("firstfit")
 # main("firstfit")
 # main("bestfit")
