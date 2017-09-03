@@ -26,9 +26,9 @@ def tasks_generator(num_of_tasks, num_of_choices):
 
 
 # generate each worker answer
-def choices_generator(expertise, num_of_choices, answer):
+def choices_generator(prob, num_of_choices, answer):
     random_float = uniform_random_generator(0,1)
-    if random_float <= expertise:
+    if random_float <= prob:
         return answer
     else:
         wrong_ans = np.zeros(num_of_choices - 1)
@@ -37,8 +37,8 @@ def choices_generator(expertise, num_of_choices, answer):
             if (choice + 1) != answer:
                 wrong_ans[index] = choice + 1
                 index += 1
-        fraction = (1.0 - expertise)/(num_of_choices - 1)
-        return wrong_ans[int((random_float-expertise)/fraction)]
+        fraction = (1.0 - prob)/(num_of_choices - 1)
+        return wrong_ans[int((random_float-prob)/fraction)]
 
 
 # simulate the choices for all the workers (assume every worker answers all tasks)
