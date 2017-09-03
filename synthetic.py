@@ -432,7 +432,7 @@ confidence_init = 0.5
 max_number_of_workers = 50
 accuracy_ff = 0
 time_ff = 0
-iteration = 10
+iteration = 1
 
 def main(assign_mode):
     accuracy_ff = 0
@@ -448,6 +448,6 @@ def main(assign_mode):
     # logging.info(str(assign_mode), ": ")
     # logging.info(str())
 
-main("random")
-# main("firstfit")
+# main("random")
+main("firstfit")
 # main("bestfit")
