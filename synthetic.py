@@ -106,6 +106,7 @@ def prescan(num_of_workers, num_of_tasks, num_of_choices, task_capacity, dei_wbt
 
 
 def assign_first_open(num_of_workers, num_of_tasks, num_of_choices, dei_wbt, remain_capacity_wbt, assign_scheme_tbw, completed_tasks, available_workers, open_tasks, truths, expertise_truths, difficulty_truths):
+    #to do: can not find first open
     min_task = ""
     min_worker = ""
     min_dei = 10000
@@ -116,7 +117,9 @@ def assign_first_open(num_of_workers, num_of_tasks, num_of_choices, dei_wbt, rem
                 min_dei = current
                 min_worker = w
                 min_task = t
-    print "assign worker ", min_worker, " task ", min_task
+
+    print "assign first worker ", min_worker, " task ", min_task
+
     process_assignment(min_worker, min_task, num_of_choices, assign_scheme_tbw, available_workers,dei_wbt,remain_capacity_wbt,truths, expertise_truths, difficulty_truths)
     open_tasks.append(min_task)
 
@@ -131,7 +134,7 @@ def process_assignment(worker, task, num_of_choices, assign_scheme_tbw, availabl
     assign_scheme_tbw[choice][task][worker] = 1
     available_workers.remove(worker)
     update_dei(worker, task, dei_wbt[worker][task], remain_capacity_wbt)
-    print "assign worker ", worker, " task ", task
+    print "process assign worker ", worker, " task ", task
 
 
 def assign_to_first_open(worker, dei_wbt, open_tasks, assign_scheme_tbw, available_workers,remain_capacity_wbt, num_of_choices, truths, expertise_truths, difficulty_truths):
@@ -150,6 +153,7 @@ def assign_to_closed(worker, num_of_tasks, dei_wbt, remain_capacity_wbt, assign_
         if task not in completed_tasks and 0 <= current < min_dei:
             min_task = task
             min_dei = current
+    print "assign to closed "
     process_assignment(worker, min_task, num_of_choices, assign_scheme_tbw, available_workers, dei_wbt, remain_capacity_wbt, truths, expertise_truths, difficulty_truths)
     open_tasks.append(min_task)
 
@@ -248,10 +252,10 @@ def calculate_ei(infer_confidence_score, infer_confidence, infer_expertise_score
         updated_confidence_score[i] = np.add(np.asarray([infer_confidence_score[i],] * num_of_workers), np.asarray(infer_expertise_score)[:,None]) # wbt # have to add dampen factors
     updated_dampen_confidence_score[0] = updated_confidence_score[0] - updated_confidence_score[1]
     updated_dampen_confidence_score[1] = updated_confidence_score[1] - updated_confidence_score[0]
+
     for i in range(num_of_choices):
         updated_confidence[i] = (1/(1 + np.power(math.e, -updated_dampen_confidence_score[i]))) * np.asarray(infer_difficulty) #make sure the infer/update confidence have the same difficulties
         if i is 0:
-            a=  np.asarray(updated_confidence[i]) - np.asarray(infer_confidence[1])
             updated_difficulty_score[i] = np.abs(np.subtract(np.asarray(updated_confidence[i]),np.asarray(infer_confidence[1])))
         elif i is 1:
             updated_difficulty_score[i] = np.abs(np.subtract(updated_confidence[i],infer_confidence[0]))
@@ -291,6 +295,7 @@ def start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_
                     confidence[choice][task] = difficulty[task] * (1 / (1 + np.power(math.e, -confidence_score_damping[choice][task])))
                     # confidence[choice][task] = 1 / (1 + np.power(math.e, -confidence_score_damping[choice][task]))
 
+            confidence = confidence / confidence.sum(axis=0) # normalize confidence
             for x in range(num_of_workers):
                 expertise[x] = 0
                 for task in range(num_of_tasks):
@@ -299,7 +304,7 @@ def start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_
             expertise = [x / num_of_tasks for x in expertise]
 
         difficulty_score = np.zeros(num_of_tasks)
-        for iter_right in range(5):  # right cycle
+        for iter_right in range(3):  # right cycle
             for task in range(num_of_tasks):
                 difficulty_score[task] = np.abs(confidence[0][task] - confidence[1][task])
                 difficulty[task] = 1 / (1 + 0.4 * np.power(math.e, -difficulty_score[task]))
@@ -308,6 +313,7 @@ def start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_
                 for choice in range(num_of_choices):
                     confidence[choice][task] = difficulty[task] * (1 / (1 + np.power(math.e, -confidence_score_damping[choice][task])))
 
+            confidence = confidence / confidence.sum(axis=0)  # normalize confidence
         # update expertise
         for x in range(num_of_workers):
             expertise[x] = 0
@@ -318,13 +324,17 @@ def start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_
     return [expertise, expertise_score, confidence, confidence_score, difficulty, difficulty_score] #check whether local can return
 
 
-def process_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, infer_confidence_score, completed_tasks, infer_truths):
+def process_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, infer_confidence, completed_tasks, infer_truths):
     for i in range(num_of_tasks):
         if i in completed_tasks and infer_truths[i] == 0:
-            infer_truths[i] = 1 if infer_confidence_score[0][i] > infer_confidence_score[1][i] else 2
+            infer_truths[i] = 1 if infer_confidence[0][i] > infer_confidence[1][i] else 2
         if i not in completed_tasks and infer_difficulty_score[i] >= threshold:
-            infer_truths[i] = 1 if infer_confidence_score[0][i] > infer_confidence_score[1][i] else 2
+            infer_truths[i] = 1 if infer_confidence[0][i] > infer_confidence[1][i] else 2
             completed_tasks.append(i)
+
+    for i in range(num_of_tasks):
+        if i not in completed_tasks:
+            print "task ", i, " has inferred difficulty score: ", infer_difficulty_score[i], " has confidence: ", infer_confidence[0][i], " and ", infer_confidence[1][i]
 
 
 def print_accuracy(num_of_tasks, truths, infer_truths):
@@ -341,7 +351,7 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
     infer_difficulty = [difficulty_init] * num_of_tasks
     infer_difficulty_score = np.zeros(num_of_tasks)
     truths = tasks_generator(num_of_tasks, num_of_choices) # 1 x tasks
-    difficulty_truths = [uniform_random_generator(0.6,1)] * num_of_tasks
+    difficulty_truths = [uniform_random_generator(0.8,1)] * num_of_tasks
     expertise_truths = []
     infer_truths = np.zeros(num_of_tasks)
     completed_tasks = []
@@ -349,13 +359,17 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
     while(len(completed_tasks) < num_of_tasks): #begin a batch, old workers/tasks: last batch paras, new workers/tasks: initialized
         # print #completed tasks as the potentially completed questions
         # num_of_workers += worker_arri_rate if num_of_workers < max_number_of_workers else 1 # control the max numer of workers
+        print "_________________________iteration_________________________: ", time
+        process_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, infer_confidence, completed_tasks,infer_truths)  # check whether completed tasks are updated
+        print "_________________________completed tasks after processing:", completed_tasks
+        print "_________________________#completes: ", len(completed_tasks)
         num_of_workers += worker_arri_rate
         if num_of_workers == worker_arri_rate:
             assign_scheme_tbw = [np.zeros((num_of_tasks, num_of_workers)) for _ in range(num_of_choices)]  # assignmnet scheme
         else:
             assign_scheme_tbw = [np.hstack((assign_scheme_tbw[i], np.zeros((num_of_tasks, worker_arri_rate)))) for i in range(num_of_choices)]
 
-        expertise_truths = expertise_truths + [uniform_random_generator(0.4, 0.999)] * worker_arri_rate
+        expertise_truths = expertise_truths + [uniform_random_generator(0.5, 0.999)] * worker_arri_rate
 
         infer_expertise = infer_expertise + [expertise_init] * worker_arri_rate
         infer_expertise_score = infer_expertise_score + [-np.log(1-expertise_init)] * worker_arri_rate
@@ -367,9 +381,8 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
         # consider task processing time, should add an available worker set, check whether assign_scheme_tbw is changed
         assign_with_mode(assign_mode, num_of_workers, num_of_tasks, num_of_choices, task_capacity, dei_wbt, assign_scheme_tbw, completed_tasks, truths, expertise_truths, difficulty_truths) # assign_scheme_tbw includes the answers
         [infer_expertise, infer_expertise_score, infer_confidence, infer_confidence_score, infer_difficulty, infer_difficulty_score] = start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_tbw,expertise_init, difficulty_init)
-        print "iteration: ", time
-        process_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, infer_confidence_score, completed_tasks, infer_truths)  # check whether completed tasks are updated
-        print "process completed:", completed_tasks
+        # process_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, infer_confidence, completed_tasks, infer_truths)  # check whether completed tasks are updated
+        # print "process completed:", completed_tasks
         time += 1
     return [print_accuracy(num_of_tasks, truths, infer_truths), time]
 
@@ -377,24 +390,26 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
 num_of_tasks = 15
 worker_arri_rate = 1
 num_of_choices = 2
-threshold = 0.6
+threshold = 0.4
 expertise_init = 0.5
 difficulty_init = 0.5
 confidence_init = 0.5
 max_number_of_workers = 50
 accuracy_ff = 0
 time_ff = 0
-accuracy_rdm = 0
-accuracy_bf = 0
 iteration = 5
-# synthetic_exp("random", max_number_of_workers, worker_arri_rate, num_of_tasks, num_of_choices, expertise_init, difficulty_init, confidence_init, threshold)
-for ite in range(iteration):
-    [accuracy, time] = synthetic_exp("firstfit", max_number_of_workers, worker_arri_rate, num_of_tasks, num_of_choices, expertise_init, difficulty_init, confidence_init, threshold)
-    accuracy_ff += accuracy
-    time_ff += time
 
-print "first fit: "
-print " accuracy: ", 100*float(accuracy_ff)/(iteration * num_of_tasks), "%"
-print " time: ", float(time_ff)/iteration
-# print "bestfit:", float(accuracy_bf)/iteration
-# print "random:", float(accuracy_rdm)/iteration
+def main(assign_mode):
+    accuracy_ff = 0
+    time_ff = 0
+    for ite in range(iteration):
+        [accuracy, time] = synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_tasks, num_of_choices, expertise_init, difficulty_init, confidence_init, threshold)
+        accuracy_ff += accuracy
+        time_ff += time
+    print assign_mode, ": "
+    print " accuracy: ", 100*float(accuracy_ff)/(iteration * num_of_tasks), "%"
+    print " time: ", float(time_ff)/iteration
+
+main("random")
+# main("firstfit")
+# main("bestfit")
