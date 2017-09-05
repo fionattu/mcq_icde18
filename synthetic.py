@@ -231,7 +231,7 @@ def assign_to_best_open(worker, dei_wbt, open_tasks, assign_scheme_tbw, availabl
 def start_best_fit(num_of_workers, num_of_tasks, num_of_choices, task_capacity, dei_wbt, assign_scheme_tbw, completed_tasks, available_workers, truths, expertise_truths, difficulty_truths):
     remain_capacity_wbt = np.subtract(task_capacity,dei_wbt)  # after prescan, available_worker have "positive" dei over all non-completed tasks
     open_tasks = []
-    next_assignment_feasible = assign_first_open(num_of_workers, num_of_tasks, num_of_choices, dei_wbt,remain_capacity_wbt, assign_scheme_tbw, completed_tasks,available_workers, open_tasks, truths, expertise_truths,difficulty_truths)
+    next_assignment_feasible = assign_first_open(num_of_tasks, num_of_choices, dei_wbt, remain_capacity_wbt, assign_scheme_tbw, completed_tasks, available_workers, open_tasks, truths, expertise_truths, difficulty_truths)
     if next_assignment_feasible:
         for worker in range(num_of_workers):
             if worker in available_workers:
@@ -292,7 +292,7 @@ def calculate_ei(infer_confidence_score, infer_confidence, infer_expertise_score
     updated_dampen_confidence_score[1] = updated_confidence_score[1] - updated_confidence_score[0]
 
     for i in range(num_of_choices):
-        updated_confidence[i] = (1/(1 + np.power(math.e, -updated_dampen_confidence_score[i]))) * np.asarray(infer_difficulty) #make sure the infer/update confidence have the same difficulties
+        updated_confidence[i] = (1/(1 + np.power(math.e, -5*updated_dampen_confidence_score[i]))) * np.asarray(infer_difficulty) #make sure the infer/update confidence have the same difficulties
         if i is 0:
             updated_difficulty_score[i] = np.abs(np.subtract(np.asarray(updated_confidence[i]),np.asarray(infer_confidence[1])))
         elif i is 1:
@@ -333,7 +333,7 @@ def start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_
 
             for task in range(num_of_tasks):
                 for choice in range(num_of_choices):
-                    confidence[choice][task] = difficulty[task] * (1 / (1 + np.power(math.e, -confidence_score_damping[choice][task])))
+                    confidence[choice][task] = difficulty[task] * (1 / (1 + np.power(math.e, -5*confidence_score_damping[choice][task])))
                     # confidence[choice][task] = 1 / (1 + np.power(math.e, -confidence_score_damping[choice][task]))
 
             confidence = confidence / confidence.sum(axis=0) # normalize confidence
@@ -352,7 +352,7 @@ def start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_
             # update confidence
             for task in range(num_of_tasks):
                 for choice in range(num_of_choices):
-                    confidence[choice][task] = difficulty[task] * (1 / (1 + np.power(math.e, -confidence_score_damping[choice][task])))
+                    confidence[choice][task] = difficulty[task] * (1 / (1 + np.power(math.e, -5*confidence_score_damping[choice][task])))
 
             confidence = confidence / confidence.sum(axis=0)  # normalize confidence
         # update expertise
@@ -407,12 +407,12 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
         num_of_workers += worker_arri_rate
         if num_of_workers == worker_arri_rate:
             assign_scheme_tbw = [np.zeros((num_of_tasks, num_of_workers)) for _ in range(num_of_choices)]  # assignmnet scheme
+            infer_expertise = infer_expertise + [expertise_init] * worker_arri_rate
         else:
             assign_scheme_tbw = [np.hstack((assign_scheme_tbw[i], np.zeros((num_of_tasks, worker_arri_rate)))) for i in range(num_of_choices)]
+            infer_expertise = infer_expertise + [sum(infer_expertise) / (num_of_workers - worker_arri_rate)] * worker_arri_rate
 
         expertise_truths = expertise_truths + [uniform_random_generator(0.5, 0.999)] * worker_arri_rate
-
-        infer_expertise = infer_expertise + [expertise_init] * worker_arri_rate
         infer_expertise_score = infer_expertise_score + [-np.log(1-expertise_init)] * worker_arri_rate
         estimated_difficulty_score = np.abs(np.subtract(np.asarray(infer_confidence[0]), np.asarray(infer_confidence[1])))
         task_capacity = threshold - estimated_difficulty_score #threshold can be vector or scala
@@ -467,5 +467,5 @@ def main(assign_mode):
     logging.info("")
 
 # main("random")
-main("firstfit")
-# main("bestfit")
+# main("firstfit")
+main("bestfit")
