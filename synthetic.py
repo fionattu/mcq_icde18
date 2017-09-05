@@ -423,8 +423,8 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
     return [print_accuracy(num_of_tasks, truths, infer_truths), time]
 
 
-num_of_tasks = 50
-worker_arri_rate = 2
+num_of_tasks = 1000
+worker_arri_rate = 1
 num_of_choices = 2
 threshold = 0.3
 expertise_init = 0.5
@@ -433,7 +433,7 @@ confidence_init = 0.5
 max_number_of_workers = 50
 accuracy_ff = 0
 time_ff = 0
-iteration = 10
+iteration = 5
 
 def main(assign_mode):
     accuracy_ff = 0
