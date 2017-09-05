@@ -423,7 +423,7 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
     return [print_accuracy(num_of_tasks, truths, infer_truths), time]
 
 
-num_of_tasks = 1000
+num_of_tasks = [50,100,150,200]
 worker_arri_rate = 1
 num_of_choices = 2
 threshold = 0.3
@@ -433,26 +433,28 @@ confidence_init = 0.5
 max_number_of_workers = 50
 accuracy_ff = 0
 time_ff = 0
-iteration = 5
+iteration = 10
 
 def main(assign_mode):
-    accuracy_ff = 0
-    time_ff = 0
     logging.basicConfig(filename=assign_mode + str(datetime.date.today().strftime("%d%m%y")) +'.log', filemode='w',level=logging.DEBUG)
 
-    for ite in range(iteration):
-        [accuracy, time] = synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_tasks, num_of_choices, expertise_init, difficulty_init, confidence_init, threshold)
-        accuracy_ff += accuracy
-        time_ff += time
-
-    print assign_mode, ": "
-    print " accuracy: ", 100*float(accuracy_ff)/(iteration * num_of_tasks), "%"
-    print " time: ", float(time_ff)/iteration
-    logging.info("number of tasks:%d, worker arri rate:%d, iterations:%d, threshold: %f", num_of_tasks, worker_arri_rate, iteration,threshold)
-    logging.info("%s: ", assign_mode)
-    logging.info(" accuracy: %f", 100*float(accuracy_ff)/(iteration * num_of_tasks))
-    logging.info(" time: %f", float(time_ff)/iteration)
-    logging.info("")
+    for task_count in num_of_tasks:
+        print "task count", task_count
+        accuracy_ff = 0
+        time_ff = 0
+        for ite in range(iteration):
+            [accuracy, time] = synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, task_count, num_of_choices, expertise_init, difficulty_init, confidence_init, threshold)
+            accuracy_ff += accuracy
+            time_ff += time
+        print assign_mode, ": "
+        print " accuracy: ", 100*float(accuracy_ff)/(iteration * task_count), "%"
+        print " time: ", float(time_ff)/iteration
+        logging.info("________________________________result________________________________")
+        logging.info("number of tasks:%d, worker arri rate:%d, iterations:%d, threshold: %f", task_count, worker_arri_rate, iteration,threshold)
+        logging.info("%s: ", assign_mode)
+        logging.info(" accuracy: %f", 100*float(accuracy_ff)/(iteration * task_count))
+        logging.info(" time: %f", float(time_ff)/iteration)
+        logging.info("________________________________result________________________________")
 
 
 def run_main():
