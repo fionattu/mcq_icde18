@@ -1,7 +1,6 @@
 # processing time shoule be considered: processing is k for each hit
 from math import log
-from EM import *
-import json
+from truthfinder import *
 import random
 
 
@@ -24,17 +23,27 @@ def get_available_workers(num_of_workers, assignment):
     return ava_workers
 
 
-def update_available_worker(assignment):
-
+def worker_submit_answers(assignment, tasks, quality, assign_scheme_tbw, truths): # update prococessing
     if len(assignment) != 0:
         print assignment
         for index in range(len(assignment)):
             for key in assignment[index]:
                 if len(assignment[index][key]) != 0: # check
-                    assignment[index][key].pop() # check minus one task
-
+                    task = assignment[index][key].pop() # check minus one task
+                    task_dist = tasks[task]
+                    qua = quality[key]
+                    answer = int(choices_generator(qua, len(task_dist), truths[task]) - 1)
+                    assign_scheme_tbw[answer][task][key] = 1
+                    delta = task_dist[answer] * qua + (1.0 - task_dist[answer]) * (1.0 - qua) / (len(task_dist) - 1)
+                    for i in range(len(task_dist)):
+                        if i != answer:
+                            task_dist[i] = task_dist[i] * (1.0 - qua) / (len(task_dist) - 1) / delta
+                        else:
+                            task_dist[i] = task_dist[i] * qua / delta
+                    tasks[task] = task_dist
     print assignment
     print ""
+
 
 
 def check_open_tasks(worker, num_of_tasks, assign_tbw):
@@ -66,6 +75,7 @@ def assign(eval, num_of_tasks, available_workers, assign_tbw, quality, tasks, k,
         elif eval == "fscore":
             assigned_task_dist, assigned_tasks = assign_fscore(quality[worker], tasks, k, open_tasks)  # tasks should be available to this worker
         update_assign_tbw(worker, assigned_tasks, assign_tbw, processing)
+
     print ""
     # update_Qc()
     # update_Qw()
@@ -79,7 +89,6 @@ def assign_accuracy(worker_quality, tasks, k, open_tasks): #tasks should be avai
     quality = worker_quality
     quesNum = k
     etpList = []
-    # print "assign accuracy, tasks: ", tasks
     for x in range(len(tasks)):
         if x in open_tasks:
             dis = tasks[x]
@@ -87,6 +96,7 @@ def assign_accuracy(worker_quality, tasks, k, open_tasks): #tasks should be avai
             l = len(dis) # number of labels
             for t in range(l):
                 delta = dis[t] * quality + (1.0 - dis[t]) * (1 - quality) / (l - 1)
+                print "delta:", quality
                 disTemp = []
                 for j in range(l):
                     if (t != j):
@@ -94,6 +104,7 @@ def assign_accuracy(worker_quality, tasks, k, open_tasks): #tasks should be avai
                     else:
                         disTemp.append(dis[j] * quality / delta)
                 etp = etp - entropy(disTemp) * delta
+                print ""
             etpList.append((x, etp))
     etpList = sorted(etpList, key=lambda x: x[1], reverse=True)
     res = [tasks[etpList[x][0]] for x in range(quesNum)] # worker estimated distribution
@@ -107,7 +118,7 @@ def assign_fscore(worker_quality, tasks, k, open_tasks):
     etpList = []
     for x in range(len(tasks)):
         if x in open_tasks:
-            dis = json.loads(tasks[x].distribution)
+            dis = tasks[x]
             etp = entropy(dis)
             l = len(dis)
             sample = random.random()
@@ -131,39 +142,34 @@ def assign_fscore(worker_quality, tasks, k, open_tasks):
 
 
 #update Qc
-def update_Qc(quality, worker_answer, task, Qc):
-    dis = json.loads(task.distribution)
-
-    delta = dis[worker_answer] * quality + (1.0 - dis[worker_answer]) * (1.0 - quality) / (len(dis) - 1)
-    for i in range(len(dis)):
-        if i != worker_answer:
-            dis[i] = dis[i] * (1.0 - quality) / (len(dis) - 1) / delta
-        else:
-            dis[i] = dis[i] * quality / delta
-    task.distribution = json.dumps(dis)
+# def update_Qc(quality, worker_answer, task, Qc):
+#     dis = json.loads(task.distribution)
+#
+#     delta = dis[worker_answer] * quality + (1.0 - dis[worker_answer]) * (1.0 - quality) / (len(dis) - 1)
+#     for i in range(len(dis)):
+#         if i != worker_answer:
+#             dis[i] = dis[i] * (1.0 - quality) / (len(dis) - 1) / delta
+#         else:
+#             dis[i] = dis[i] * quality / delta
+#     task.distribution = json.dumps(dis)
 
 
 #update Qw
-def update_Qw(answers, worker, tasks):
-    res = answers
-    resList = []
-    workerQualityDict = {}
-    for x in res:
-        resList.append([x.taskId, x.workerId, x.result])
-        workerQualityDict[x.workerId] = WorkerInfo.objects.get(workerId=x.workerId).quality
-
-    res = EM.infer(resList, workerQualityDict)
-    for x in res:
-        task = TaskInfo.objects.get(taskId=x)
-        task.result = res[x]
-        task.save()
-    for workerId in workerQualityDict:
-        worker = WorkerInfo.objects.get(workerId=workerId)
-        worker.quality = workerQualityDict[workerId]
-        worker.save()
-
-
-def qasca(num_of_workers, num_of_tasks, num_of_choices, worker_quality, task_, confidence_init, threshold):
-    num_of_tasks
-
+# def update_Qw(answers, worker, tasks):
+#     res = answers
+#     resList = []
+#     workerQualityDict = {}
+#     for x in res:
+#         resList.append([x.taskId, x.workerId, x.result])
+#         workerQualityDict[x.workerId] = WorkerInfo.objects.get(workerId=x.workerId).quality
+#
+#     res = EM.infer(resList, workerQualityDict)
+#     for x in res:
+#         task = TaskInfo.objects.get(taskId=x)
+#         task.result = res[x]
+#         task.save()
+#     for workerId in workerQualityDict:
+#         worker = WorkerInfo.objects.get(workerId=workerId)
+#         worker.quality = workerQualityDict[workerId]
+#         worker.save()
 

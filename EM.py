@@ -32,7 +32,7 @@ class EM:
 
             for tlabel in lpd:
                 if total_weight == 0:
-                    # uniform distribution
+                    # uniform task_distribution
                     lpd[tlabel] = 1.0/len(self.label_set)
                 else:
                     lpd[tlabel] = lpd[tlabel]*1.0/total_weight
