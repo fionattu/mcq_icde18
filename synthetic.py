@@ -463,7 +463,7 @@ def synthetic_exp(assign_mode, eval, k, worker_arri_rate, num_of_tasks, num_of_c
 
 
 # num_of_tasks = [50,100,150,200,500,1000]
-num_of_tasks = [50]
+num_of_tasks = [100]
 worker_arri_rate = 1
 num_of_choices = 2
 threshold = 0.3
@@ -501,6 +501,6 @@ def run_main():
     # print_result("random")
     # print_result("firstfit")
     # print_result("bestfit")
-    print_result("baseline", "accuracy", 2) # baseline, accuracy/fscore, top-k
-    # print_result("baseline", "fscore", 2)
+    # print_result("baseline", "accuracy", 2) # baseline, accuracy/fscore, top-k
+    print_result("baseline", "fscore", 2)
 run_main()
