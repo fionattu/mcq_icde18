@@ -1,5 +1,6 @@
 import datetime
 
+from baseline import *
 from truthfinder import *
 import logging
 
@@ -379,7 +380,7 @@ def print_accuracy(num_of_tasks, truths, infer_truths):
     return (num_of_tasks - np.count_nonzero(np.subtract(truths, infer_truths)))
 
 
-def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_tasks, num_of_choices, expertise_init, difficulty_init, confidence_init, threshold):
+def synthetic_exp(assign_mode, eval, k, worker_arri_rate, num_of_tasks, num_of_choices, expertise_init, difficulty_init, confidence_init, threshold):
     num_of_workers = 0
     infer_expertise = []
     infer_expertise_score = []
@@ -392,38 +393,66 @@ def synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, num_of_t
     infer_truths = np.zeros(num_of_tasks)
     completed_tasks = []
     time = 0
+    #qasca_init_begin
+    if assign_mode == "baseline":
+        quality = []
+        tasks = []
+        processing = []
+        for t in range(num_of_tasks):
+            task = [1.0/num_of_choices]*num_of_choices
+            tasks.append(task)
+    #qasca_init_end
+
     while(len(completed_tasks) < num_of_tasks): #begin a batch, old workers/tasks: last batch paras, new workers/tasks: initialized
         num_of_workers += worker_arri_rate
-        if num_of_workers == worker_arri_rate:
-            assign_scheme_tbw = [np.zeros((num_of_tasks, num_of_workers)) for _ in range(num_of_choices)]  # assignmnet scheme
-            infer_expertise = infer_expertise + [expertise_init] * worker_arri_rate
+
+        # qasca_begin
+        if assign_mode == "baseline":
+            if num_of_workers == worker_arri_rate:
+                assign_tbw = np.zeros((num_of_tasks, num_of_workers))
+            else:
+                assign_tbw = [np.hstack((assign_tbw, np.zeros((num_of_tasks, worker_arri_rate))))]
+
+            quality = quality + [1.0] * worker_arri_rate
+            available_workers = get_available_workers(num_of_workers, processing)
+            assign(eval, num_of_tasks, available_workers, assign_tbw, quality, tasks, k, processing)
+            update_available_worker(processing) # update prococessing
+            inference(completed_tasks) # check completed tasks
+        # qasca_end
+
         else:
-            assign_scheme_tbw = [np.hstack((assign_scheme_tbw[i], np.zeros((num_of_tasks, worker_arri_rate)))) for i in range(num_of_choices)]
-            infer_expertise = infer_expertise + [sum(infer_expertise) / (num_of_workers - worker_arri_rate)] * worker_arri_rate
+            if num_of_workers == worker_arri_rate:
+                assign_scheme_tbw = [np.zeros((num_of_tasks, num_of_workers)) for _ in range(num_of_choices)]  # assignmnet scheme
+                infer_expertise = infer_expertise + [expertise_init] * worker_arri_rate
+            else:
+                assign_scheme_tbw = [np.hstack((assign_scheme_tbw[i], np.zeros((num_of_tasks, worker_arri_rate)))) for i in range(num_of_choices)]
+                infer_expertise = infer_expertise + [sum(infer_expertise) / (num_of_workers - worker_arri_rate)] * worker_arri_rate
 
-        expertise_truths = expertise_truths + [uniform_random_generator(0.5, 0.999)] * worker_arri_rate
-        infer_expertise_score = infer_expertise_score + [-np.log(1-expertise_init)] * worker_arri_rate
-        estimated_difficulty_score = np.abs(np.subtract(np.asarray(infer_confidence[0]), np.asarray(infer_confidence[1])))
-        task_capacity = threshold - estimated_difficulty_score #threshold can be vector or scala
-        dei_wbt = calculate_dei(num_of_workers, num_of_tasks, num_of_choices, infer_expertise, infer_expertise_score,
-                                                infer_difficulty, estimated_difficulty_score, infer_confidence, infer_confidence_score)
 
-        # consider task processing time, should add an available worker set, check whether assign_scheme_tbw is changed
-        assign_with_mode(assign_mode, num_of_workers, num_of_tasks, num_of_choices, task_capacity, dei_wbt, assign_scheme_tbw, completed_tasks, truths, expertise_truths, difficulty_truths) # assign_scheme_tbw includes the answers
-        [infer_expertise, infer_expertise_score, infer_confidence, infer_confidence_score, infer_difficulty, infer_difficulty_score] = start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_tbw,expertise_init, difficulty_init)
-        print "_________________________iteration_________________________: ", time
-        logging.info("_________________________iteration_________________________: %d", time)
-        process_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, infer_confidence, completed_tasks,
-                                infer_truths)  # check whether completed tasks are updated
-        print "_________________________completed tasks after processing:", completed_tasks
-        print "_________________________#completes: ", len(completed_tasks)
-        # logging.info("_________________________completed tasks after processing:%d", completed_tasks)
-        logging.info("_________________________#completes: %d", len(completed_tasks))
-        time += 1
+            expertise_truths = expertise_truths + [uniform_random_generator(0.5, 0.999)] * worker_arri_rate
+            infer_expertise_score = infer_expertise_score + [-np.log(1-expertise_init)] * worker_arri_rate
+            estimated_difficulty_score = np.abs(np.subtract(np.asarray(infer_confidence[0]), np.asarray(infer_confidence[1])))
+            task_capacity = threshold - estimated_difficulty_score #threshold can be vector or scala
+            dei_wbt = calculate_dei(num_of_workers, num_of_tasks, num_of_choices, infer_expertise, infer_expertise_score,
+                                                    infer_difficulty, estimated_difficulty_score, infer_confidence, infer_confidence_score)
+
+            # consider task processing time, should add an available worker set, check whether assign_scheme_tbw is changed
+            assign_with_mode(assign_mode, num_of_workers, num_of_tasks, num_of_choices, task_capacity, dei_wbt, assign_scheme_tbw, completed_tasks, truths, expertise_truths, difficulty_truths) # assign_scheme_tbw includes the answers
+            [infer_expertise, infer_expertise_score, infer_confidence, infer_confidence_score, infer_difficulty, infer_difficulty_score] = start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_tbw,expertise_init, difficulty_init)
+            print "_________________________iteration_________________________: ", time
+            logging.info("_________________________iteration_________________________: %d", time)
+            process_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, infer_confidence, completed_tasks,
+                                    infer_truths)  # check whether completed tasks are updated
+            print "_________________________completed tasks after processing:", completed_tasks
+            print "_________________________#completes: ", len(completed_tasks)
+            # logging.info("_________________________completed tasks after processing:%d", completed_tasks)
+            logging.info("_________________________#completes: %d", len(completed_tasks))
+            time += 1
     return [print_accuracy(num_of_tasks, truths, infer_truths), time]
 
 
-num_of_tasks = [50,100,150,200]
+# num_of_tasks = [50,100,150,200,500,1000]
+num_of_tasks = [10]
 worker_arri_rate = 1
 num_of_choices = 2
 threshold = 0.3
@@ -435,7 +464,7 @@ accuracy_ff = 0
 time_ff = 0
 iteration = 10
 
-def main(assign_mode):
+def print_result(assign_mode, eval = "accuracy", k = 1):
     logging.basicConfig(filename=assign_mode + str(datetime.date.today().strftime("%d%m%y")) +'.log', filemode='w',level=logging.DEBUG)
 
     for task_count in num_of_tasks:
@@ -443,7 +472,7 @@ def main(assign_mode):
         accuracy_ff = 0
         time_ff = 0
         for ite in range(iteration):
-            [accuracy, time] = synthetic_exp(assign_mode, max_number_of_workers, worker_arri_rate, task_count, num_of_choices, expertise_init, difficulty_init, confidence_init, threshold)
+            [accuracy, time] = synthetic_exp(assign_mode, eval, k, worker_arri_rate, task_count, num_of_choices, expertise_init, difficulty_init, confidence_init, threshold)
             accuracy_ff += accuracy
             time_ff += time
         print assign_mode, ": "
@@ -458,8 +487,9 @@ def main(assign_mode):
 
 
 def run_main():
-    main("random")
-    main("firstfit")
-    main("bestfit")
-
+    # print_result("random")
+    # print_result("firstfit")
+    # print_result("bestfit")
+    print_result("baseline", "accuracy", 1) # baseline, accuracy/fscore, top-k
+    # print_result("baseline", "fscore")
 run_main()
