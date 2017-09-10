@@ -411,7 +411,7 @@ def synthetic_exp(assign_mode, eval, k, worker_arri_rate, num_of_tasks, num_of_c
             if num_of_workers == worker_arri_rate:
                 assign_tbw = np.zeros((num_of_tasks, num_of_workers))
             else:
-                assign_tbw = [np.hstack((assign_tbw, np.zeros((num_of_tasks, worker_arri_rate))))]
+                assign_tbw = np.hstack((assign_tbw, np.zeros((num_of_tasks, worker_arri_rate))))
 
             quality = quality + [1.0] * worker_arri_rate
             available_workers = get_available_workers(num_of_workers, processing)
@@ -490,6 +490,6 @@ def run_main():
     # print_result("random")
     # print_result("firstfit")
     # print_result("bestfit")
-    print_result("baseline", "accuracy", 1) # baseline, accuracy/fscore, top-k
+    print_result("baseline", "accuracy", 2) # baseline, accuracy/fscore, top-k
     # print_result("baseline", "fscore")
 run_main()

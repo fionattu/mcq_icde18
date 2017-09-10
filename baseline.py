@@ -19,19 +19,22 @@ def get_available_workers(num_of_workers, assignment):
         return ava_workers
     for ass_index in range(len(assignment)):
         for ass_key in assignment[ass_index]:
-            # if assignment[ass_index][ass_key] is not None:
-            ava_workers.remove(ass_key)
+            if len(assignment[ass_index][ass_key]) != 0:
+                ava_workers.remove(ass_key)
     return ava_workers
 
 
 def update_available_worker(assignment):
+
     if len(assignment) != 0:
+        print assignment
         for index in range(len(assignment)):
             for key in assignment[index]:
                 if len(assignment[index][key]) != 0: # check
                     assignment[index][key].pop() # check minus one task
-                if len(assignment[index][key]) == 0:
-                    assignment.remove(assignment[index])
+
+    print assignment
+    print ""
 
 
 def check_open_tasks(worker, num_of_tasks, assign_tbw):
@@ -43,27 +46,32 @@ def check_open_tasks(worker, num_of_tasks, assign_tbw):
 
 
 def update_assign_tbw(worker, assigned_tasks, assign_tbw, processing):
-    ass = {worker: assigned_tasks}
-    processing.append(ass)
-    for task in assigned_tasks:
-        assign_tbw[task][worker] = 1
+    exist = False
+    for ass in processing:
+        for key in ass:
+            if key == worker:
+                exist = True
+                ass[key] = assigned_tasks
 
+    if exist is False:
+        ass = {worker: assigned_tasks}
+        processing.append(ass)
 
 
 def assign(eval, num_of_tasks, available_workers, assign_tbw, quality, tasks, k, processing):
     for worker in available_workers:
         open_tasks = check_open_tasks(worker, num_of_tasks, assign_tbw) #consider tasks being processed?
         if eval == "accuracy":
-            assigned_tasks = assign_accuracy(quality[worker], tasks, k, open_tasks)  # tasks should be available to this worker
+            assigned_task_dist, assigned_tasks = assign_accuracy(quality[worker], tasks, k, open_tasks)  # tasks should be available to this worker
         elif eval == "fscore":
-            assigned_tasks = assign_fscore(quality[worker], tasks, k, open_tasks)  # tasks should be available to this worker
+            assigned_task_dist, assigned_tasks = assign_fscore(quality[worker], tasks, k, open_tasks)  # tasks should be available to this worker
         update_assign_tbw(worker, assigned_tasks, assign_tbw, processing)
-
+    print ""
     # update_Qc()
     # update_Qw()
 
 
-def inference():
+def inference(completed_tasks):
     pass
 
 
@@ -71,10 +79,10 @@ def assign_accuracy(worker_quality, tasks, k, open_tasks): #tasks should be avai
     quality = worker_quality
     quesNum = k
     etpList = []
-    print "assign accuracy, tasks: ", tasks
+    # print "assign accuracy, tasks: ", tasks
     for x in range(len(tasks)):
         if x in open_tasks:
-            dis = json.dumps(tasks[x].distribution)
+            dis = tasks[x]
             etp = entropy(dis)
             l = len(dis) # number of labels
             for t in range(l):
@@ -88,8 +96,9 @@ def assign_accuracy(worker_quality, tasks, k, open_tasks): #tasks should be avai
                 etp = etp - entropy(disTemp) * delta
             etpList.append((x, etp))
     etpList = sorted(etpList, key=lambda x: x[1], reverse=True)
-    res = [tasks[etpList[x][0]] for x in range(quesNum)]
-    return res
+    res = [tasks[etpList[x][0]] for x in range(quesNum)] # worker estimated distribution
+    assigned_tasks = [etpList[x][0] for x in range(quesNum)]
+    return res, assigned_tasks
 
 
 def assign_fscore(worker_quality, tasks, k, open_tasks):
@@ -117,7 +126,8 @@ def assign_fscore(worker_quality, tasks, k, open_tasks):
             etpList.append((x,etp))
     etpList = sorted(etpList, key=lambda x: x[1], reverse=True)
     res = [tasks[etpList[x][0]] for x in range(quesNum)]
-    return res
+    assigned_tasks = [etpList[x][0] for x in range(quesNum)]
+    return res, assigned_tasks
 
 
 #update Qc
