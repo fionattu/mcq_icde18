@@ -3,6 +3,21 @@ from math import log
 from truthfinder import *
 import random
 
+def get_result(em):
+    res = em[0]
+    infer_truths = []
+    for index in range(len(res)):
+        infer_truths.append(res[index] + 1)
+    return infer_truths
+
+
+def get_infer_truths(num_of_tasks, infer_confidence):
+    truths = np.zeros(num_of_tasks)
+    for task in range(num_of_tasks):
+        if infer_confidence[0][task] < infer_confidence[1][task]:
+            truths[task] = 1
+    return truths
+
 
 def entropy(drb):
     eps = 1e-7
@@ -23,17 +38,25 @@ def get_available_workers(num_of_workers, assignment):
     return ava_workers
 
 
-def worker_submit_answers(assignment, tasks, quality, assign_scheme_tbw, truths): # update prococessing
+def check_completed(num_of_tasks, repeats, repetition):
+    for i in range(num_of_tasks):
+        if repeats[i] > 0:
+            return False
+    return True
+
+
+def worker_submit_answers(assignment, tasks, quality, assign_scheme_tbw, truths, resList): # update prococessing
     if len(assignment) != 0:
-        print assignment
+        # print assignment
         for index in range(len(assignment)):
             for key in assignment[index]:
                 if len(assignment[index][key]) != 0: # check
                     task = assignment[index][key].pop() # check minus one task
                     task_dist = tasks[task]
                     qua = quality[key]
-                    answer = int(choices_generator(qua, len(task_dist), truths[task]) - 1)
+                    answer = int(choices_generator(qua, len(task_dist), truths[task]))-1
                     assign_scheme_tbw[answer][task][key] = 1
+                    resList.append([task, key, answer])
                     delta = task_dist[answer] * qua + (1.0 - task_dist[answer]) * (1.0 - qua) / (len(task_dist) - 1)
                     for i in range(len(task_dist)):
                         if i != answer:
@@ -41,8 +64,8 @@ def worker_submit_answers(assignment, tasks, quality, assign_scheme_tbw, truths)
                         else:
                             task_dist[i] = task_dist[i] * qua / delta
                     tasks[task] = task_dist
-    print assignment
-    print ""
+    # print assignment
+    # print ""
 
 
 
@@ -69,17 +92,19 @@ def update_assign_tbw(worker, assigned_tasks, assign_tbw, processing, repeats):
     for task in assigned_tasks:
         repeats[task] -= 1
 
+    # print assign_tbw
+
 
 def assign(eval, num_of_tasks, available_workers, assign_tbw, quality, tasks, k, processing, repeats):
     for worker in available_workers:
         open_tasks = check_open_tasks(worker, num_of_tasks, assign_tbw, repeats) #consider tasks being processed?
         if eval == "accuracy":
             assigned_task_dist, assigned_tasks = assign_accuracy(quality[worker], tasks, k, open_tasks)  # tasks should be available to this worker
+            print "assign tasks", assigned_tasks, " to worker ", worker
         elif eval == "fscore":
             assigned_task_dist, assigned_tasks = assign_fscore(quality[worker], tasks, k, open_tasks)  # tasks should be available to this worker
         update_assign_tbw(worker, assigned_tasks, assign_tbw, processing, repeats)
 
-    print ""
     # update_Qc()
     # update_Qw()
 
@@ -99,7 +124,6 @@ def assign_accuracy(worker_quality, tasks, k, open_tasks): #tasks should be avai
             l = len(dis) # number of labels
             for t in range(l):
                 delta = dis[t] * quality + (1.0 - dis[t]) * (1 - quality) / (l - 1)
-                print "delta:", quality
                 disTemp = []
                 for j in range(l):
                     if (t != j):
@@ -107,11 +131,14 @@ def assign_accuracy(worker_quality, tasks, k, open_tasks): #tasks should be avai
                     else:
                         disTemp.append(dis[j] * quality / delta)
                 etp = etp - entropy(disTemp) * delta
-                print ""
             etpList.append((x, etp))
     etpList = sorted(etpList, key=lambda x: x[1], reverse=True)
-    res = [tasks[etpList[x][0]] for x in range(quesNum)] # worker estimated distribution
-    assigned_tasks = [etpList[x][0] for x in range(quesNum)]
+    if quesNum > len(etpList):
+        res = [tasks[etpList[x][0]] for x in range(len(etpList))]
+        assigned_tasks = [etpList[x][0] for x in range(len(etpList))]
+    else:
+        res = [tasks[etpList[x][0]] for x in range(quesNum)] # worker estimated distribution
+        assigned_tasks = [etpList[x][0] for x in range(quesNum)]
     return res, assigned_tasks
 
 

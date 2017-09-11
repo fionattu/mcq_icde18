@@ -2,6 +2,7 @@ import datetime
 
 from baseline import *
 from truthfinder import *
+import EM
 import logging
 
 # worker selection probability is different from the truthfinder similation
@@ -351,8 +352,7 @@ def start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_
             # update confidence
             for task in range(num_of_tasks):
                 for choice in range(num_of_choices):
-                    confidence[choice][task] = difficulty[task] * (1 / (1 + np.power(math.e, -5*confidence_score_damping[choice][task])))
-
+                    confidence[choice][task] = difficulty[task] * (1 / (1 + np.power(math.e, -confidence_score_damping[choice][task])))
             confidence = confidence / confidence.sum(axis=0)  # normalize confidence
         # update expertise
         for x in range(num_of_workers):
@@ -407,6 +407,7 @@ def synthetic_exp(assign_mode, eval, k, repetition, worker_arri_rate, num_of_tas
         tasks = []
         processing = []
         repeats = [repetition]*num_of_tasks
+        resList = []
         for t in range(num_of_tasks):
             task = [1.0/num_of_choices]*num_of_choices
             tasks.append(task)
@@ -417,27 +418,38 @@ def synthetic_exp(assign_mode, eval, k, repetition, worker_arri_rate, num_of_tas
 
         # qasca_begin
         if assign_mode == "baseline":
-            if num_of_workers == worker_arri_rate:
-                assign_tbw = np.zeros((num_of_tasks, num_of_workers))
-                assign_scheme_tbw = [np.zeros((num_of_tasks, num_of_workers)) for _ in
-                                     range(num_of_choices)]  # assignmnet scheme
-                infer_expertise = infer_expertise + [expertise_init] * worker_arri_rate
-            else:
-                assign_tbw = np.hstack((assign_tbw, np.zeros((num_of_tasks, worker_arri_rate))))
-                assign_scheme_tbw = [np.hstack((assign_scheme_tbw[i], np.zeros((num_of_tasks, worker_arri_rate)))) for i
-                                     in range(num_of_choices)]
-                infer_expertise = infer_expertise + [sum(infer_expertise) / (
-                num_of_workers - worker_arri_rate)] * worker_arri_rate
+            completed = False
+            while(completed is False):
+                print "______________________iteration______________________", time
+                if num_of_workers == worker_arri_rate:
+                    assign_tbw = np.zeros((num_of_tasks, num_of_workers))
+                    assign_scheme_tbw = [np.zeros((num_of_tasks, num_of_workers)) for _ in
+                                         range(num_of_choices)]  # assignmnet scheme
+                    infer_expertise = infer_expertise + [expertise_init] * worker_arri_rate
+                else:
+                    assign_tbw = np.hstack((assign_tbw, np.zeros((num_of_tasks, worker_arri_rate))))
+                    assign_scheme_tbw = [np.hstack((assign_scheme_tbw[i], np.zeros((num_of_tasks, worker_arri_rate)))) for i
+                                         in range(num_of_choices)]
+                    infer_expertise = infer_expertise + [sum(infer_expertise) / (num_of_workers - worker_arri_rate)] * worker_arri_rate
 
-            quality = quality + [uniform_random_generator(0.5,0.999)] * worker_arri_rate
-            available_workers = get_available_workers(num_of_workers, processing)
-            assign(eval, num_of_tasks, available_workers, assign_tbw, quality, tasks, k, processing, repeats)
-            worker_submit_answers(processing, tasks, quality, assign_scheme_tbw, truths)  # update prococessing, update qc
+                quality = quality + [uniform_random_generator(0.5,0.999)] * worker_arri_rate
+                available_workers = get_available_workers(num_of_workers, processing)
+                assign(eval, num_of_tasks, available_workers, assign_tbw, quality, tasks, k, processing, repeats)
+                worker_submit_answers(processing, tasks, quality, assign_scheme_tbw, truths, resList)  # update prococessing, update qc
+                if check_completed(num_of_tasks, repeats, repetition) is True:
+                    completed = True
+                if completed is False:
+                    time += 1
+                    num_of_workers += worker_arri_rate
+        # using em as inference
+        #     em = EM.infer(resList, quality)
+        #     infer_truths = get_result(em)
+        # using MCQ inference
             [infer_expertise, infer_expertise_score, infer_confidence, infer_confidence_score, infer_difficulty,
-            infer_difficulty_score] = start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_tbw,
-                                                   expertise_init, difficulty_init)
-            process_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, infer_confidence, completed_tasks,
-                                infer_truths)  # check whether completed tasks are updated
+             infer_difficulty_score] = start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_tbw,
+                                                       expertise_init, difficulty_init)
+            infer_truths = get_infer_truths(num_of_tasks, infer_confidence) + 1
+            return [print_accuracy(num_of_tasks, truths, infer_truths), time]
         # qasca_end
 
         else:
@@ -472,8 +484,8 @@ def synthetic_exp(assign_mode, eval, k, repetition, worker_arri_rate, num_of_tas
 
 
 # num_of_tasks = [50,100,150,200,500,1000]
-num_of_tasks = [50]
-iteration = 10
+num_of_tasks = [500]
+iteration = 50
 worker_arri_rate = 1
 threshold = 0.3
 
@@ -509,9 +521,9 @@ def print_result(assign_mode, eval = "accuracy", k = 1, repetition = 3):
 
 def run_main():
     # print_result("random")
-    print_result("firstfit")
+    # print_result("firstfit")
     # print_result("bestfit")
-    # print_result("baseline", "accuracy", 2, 3)  # baseline, accuracy/fscore, top-k? repetition
+    print_result("baseline", "accuracy", 2, 5)  # baseline, accuracy/fscore, top-k? repetition
     # print_result("baseline", "fscore", 2,3)
 
 
