@@ -3,11 +3,11 @@ from math import log
 from truthfinder import *
 import random
 
-def get_result(em):
+def get_result(num_of_tasks, em):
     res = em[0]
-    infer_truths = []
+    infer_truths = np.zeros(num_of_tasks)
     for index in range(len(res)):
-        infer_truths.append(res[index] + 1)
+        infer_truths[index] = res[index] + 1
     return infer_truths
 
 
@@ -38,7 +38,12 @@ def get_available_workers(num_of_workers, assignment):
     return ava_workers
 
 
-def check_completed(num_of_tasks, repeats, repetition):
+def check_completed(num_of_tasks, repeats, assignment):
+    for ass_index in range(len(assignment)):
+        for ass_key in assignment[ass_index]:
+            if len(assignment[ass_index][ass_key]) != 0:
+                return False
+
     for i in range(num_of_tasks):
         if repeats[i] > 0:
             return False
@@ -166,8 +171,12 @@ def assign_fscore(worker_quality, tasks, k, open_tasks):
                     break
             etpList.append((x,etp))
     etpList = sorted(etpList, key=lambda x: x[1], reverse=True)
-    res = [tasks[etpList[x][0]] for x in range(quesNum)]
-    assigned_tasks = [etpList[x][0] for x in range(quesNum)]
+    if quesNum > len(etpList):
+        res = [tasks[etpList[x][0]] for x in range(len(etpList))]
+        assigned_tasks = [etpList[x][0] for x in range(len(etpList))]
+    else:
+        res = [tasks[etpList[x][0]] for x in range(quesNum)]
+        assigned_tasks = [etpList[x][0] for x in range(quesNum)]
     return res, assigned_tasks
 
 

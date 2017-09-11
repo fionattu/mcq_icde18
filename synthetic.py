@@ -436,19 +436,19 @@ def synthetic_exp(assign_mode, eval, k, repetition, worker_arri_rate, num_of_tas
                 available_workers = get_available_workers(num_of_workers, processing)
                 assign(eval, num_of_tasks, available_workers, assign_tbw, quality, tasks, k, processing, repeats)
                 worker_submit_answers(processing, tasks, quality, assign_scheme_tbw, truths, resList)  # update prococessing, update qc
-                if check_completed(num_of_tasks, repeats, repetition) is True:
+                if check_completed(num_of_tasks, repeats, processing) is True:
                     completed = True
                 if completed is False:
                     time += 1
                     num_of_workers += worker_arri_rate
         # using em as inference
-        #     em = EM.infer(resList, quality)
-        #     infer_truths = get_result(em)
+            em = EM.infer(resList, quality)
+            infer_truths = get_result(num_of_tasks, em)
         # using MCQ inference
-            [infer_expertise, infer_expertise_score, infer_confidence, infer_confidence_score, infer_difficulty,
-             infer_difficulty_score] = start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_tbw,
-                                                       expertise_init, difficulty_init)
-            infer_truths = get_infer_truths(num_of_tasks, infer_confidence) + 1
+        #     [infer_expertise, infer_expertise_score, infer_confidence, infer_confidence_score, infer_difficulty,
+        #      infer_difficulty_score] = start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_tbw,
+        #                                                expertise_init, difficulty_init)
+        #     infer_truths = get_infer_truths(num_of_tasks, infer_confidence) + 1
             return [print_accuracy(num_of_tasks, truths, infer_truths), time]
         # qasca_end
 
@@ -484,7 +484,7 @@ def synthetic_exp(assign_mode, eval, k, repetition, worker_arri_rate, num_of_tas
 
 
 # num_of_tasks = [50,100,150,200,500,1000]
-num_of_tasks = [500]
+num_of_tasks = [100]
 iteration = 50
 worker_arri_rate = 1
 threshold = 0.3
@@ -523,8 +523,9 @@ def run_main():
     # print_result("random")
     # print_result("firstfit")
     # print_result("bestfit")
-    print_result("baseline", "accuracy", 2, 5)  # baseline, accuracy/fscore, top-k? repetition
-    # print_result("baseline", "fscore", 2,3)
+    # print_result("baseline", "accuracy", 1, 3)  # baseline, accuracy/fscore, top-k? repetition
+    # print_result("baseline", "fscore", 1,3)
+    pass
 
 
 run_main()
