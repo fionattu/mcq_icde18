@@ -521,11 +521,11 @@ def print_result(assign_mode, eval = "accuracy", k = 1, repetition = 3):
 
 def run_main():
     # print_result("random")
-    # print_result("firstfit")
+    print_result("firstfit")
     # print_result("bestfit")
     # print_result("baseline", "accuracy", 1, 3)  # baseline, accuracy/fscore, top-k? repetition
     # print_result("baseline", "fscore", 1,3)
-    pass
+    # pass
 
 
 run_main()
