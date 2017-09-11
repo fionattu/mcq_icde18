@@ -46,15 +46,15 @@ def worker_submit_answers(assignment, tasks, quality, assign_scheme_tbw, truths)
 
 
 
-def check_open_tasks(worker, num_of_tasks, assign_tbw):
+def check_open_tasks(worker, num_of_tasks, assign_tbw, repeats):
     tasks = range(num_of_tasks)
     for task in range(num_of_tasks):
-        if assign_tbw[task][worker] == 1:
+        if assign_tbw[task][worker] == 1 or repeats[task] <= 0:
             tasks.remove(task)
     return tasks
 
 
-def update_assign_tbw(worker, assigned_tasks, assign_tbw, processing):
+def update_assign_tbw(worker, assigned_tasks, assign_tbw, processing, repeats):
     exist = False
     for ass in processing:
         for key in ass:
@@ -66,15 +66,18 @@ def update_assign_tbw(worker, assigned_tasks, assign_tbw, processing):
         ass = {worker: assigned_tasks}
         processing.append(ass)
 
+    for task in assigned_tasks:
+        repeats[task] -= 1
 
-def assign(eval, num_of_tasks, available_workers, assign_tbw, quality, tasks, k, processing):
+
+def assign(eval, num_of_tasks, available_workers, assign_tbw, quality, tasks, k, processing, repeats):
     for worker in available_workers:
-        open_tasks = check_open_tasks(worker, num_of_tasks, assign_tbw) #consider tasks being processed?
+        open_tasks = check_open_tasks(worker, num_of_tasks, assign_tbw, repeats) #consider tasks being processed?
         if eval == "accuracy":
             assigned_task_dist, assigned_tasks = assign_accuracy(quality[worker], tasks, k, open_tasks)  # tasks should be available to this worker
         elif eval == "fscore":
             assigned_task_dist, assigned_tasks = assign_fscore(quality[worker], tasks, k, open_tasks)  # tasks should be available to this worker
-        update_assign_tbw(worker, assigned_tasks, assign_tbw, processing)
+        update_assign_tbw(worker, assigned_tasks, assign_tbw, processing, repeats)
 
     print ""
     # update_Qc()
