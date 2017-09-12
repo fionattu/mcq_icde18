@@ -8,10 +8,13 @@ def read_worker_label(dataset):
         reader = csv.reader(worker_labels, delimiter=' ', quotechar='|')
         next(reader, None) # neglect the header
         labels = []
+        workers = []
         for line in reader:
             currentline = line[0].split(',')
             labels.append({'worker': currentline[1], 'task':currentline[0], 'answer':currentline[2]})
-        return labels
+            if currentline[1] not in workers:
+                workers.append(currentline[1])
+        return workers, labels
 
 
 def read_truths(dataset):
@@ -49,17 +52,14 @@ def read_arrival_times(dataset):
         for line in reader:
             currentline = rx.split(line[0])
             if (currentline[index_of_golden] == 'FALSE'):
-                print currentline[index_of_user_ids]
-                print currentline[index_of_arrivals]
-                print " "
                 add_to_arrivals(arrivals, currentline[index_of_user_ids], currentline[index_of_arrivals])
 
 
         return arrivals
 
 
-times = read_arrival_times('Relevance_of_terms_to_disaster_relief_topics')
-# labels = read_worker_label('d_Duck Identification_40w217q')
+# times = read_arrival_times('Relevance_of_terms_to_disaster_relief_topics')
+# labels = read_worker_label('d_Duck Identification_40w217q', )
 # read_worker_label('d_sentiment_1kQ20w')
 # read_worker_label('f201_Emotion_FULL_700q10w')
 # truths = read_truths('d_Duck Identification_40w217q')
