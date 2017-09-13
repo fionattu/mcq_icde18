@@ -35,6 +35,7 @@ def add_to_arrivals(arrivals, worker, time):
         for key in arrivals[index]:
             if key == worker:
                 arrivals[index][key].append(time)
+                return
     arrivals.append({worker:[time]})
 
 
@@ -53,7 +54,6 @@ def read_arrival_times(dataset):
             currentline = rx.split(line[0])
             if (currentline[index_of_golden] == 'FALSE'):
                 add_to_arrivals(arrivals, currentline[index_of_user_ids], currentline[index_of_arrivals])
-
 
         return arrivals
 
