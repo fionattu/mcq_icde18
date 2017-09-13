@@ -112,20 +112,27 @@ def divide_timestamps(worker_arrivals, num_of_batches): # 1. only use arriving a
     start_and_end_timestamps = two_end_divider(worker_arrivals, num_of_batches)
     return even_timestamps, start_and_end_timestamps
 
-def get_real_data(ans_dataset, arrival_dataset, matching_mode,num_of_batches):
+
+def batch_assignment(ans_dataset, arrival_dataset, matching_mode,num_of_batches):
     workers, num_of_workers, truths, num_of_tasks, ans = get_ans_and_truths(ans_dataset)
     arrivals = get_arrival_times(arrival_dataset)
     worker_arrivals = worker_arrivals_match(workers,arrivals,matching_mode)
     even_timestamps, start_and_end_timestamps = divide_timestamps(worker_arrivals, num_of_batches)
     return even_timestamps, start_and_end_timestamps
 
-def test():
-    pass
 
+def main():
+    even_timestamps, start_and_end_timestamps = batch_assignment('d_Duck Identification_40w217q',
+                                                                 'Relevance_of_terms_to_disaster_relief_topics',
+                                                                 'random', 40)
+    baseline(even_timestamps, start_and_end_timestamps)
+    ff(even_timestamps, start_and_end_timestamps)
+    bf(even_timestamps, start_and_end_timestamps)
+    random(even_timestamps, start_and_end_timestamps)
 
 # test()
 #'Tweets_about_the_Syrian_civil_war'
 # 'Relevance_of_terms_to_disaster_relief_topics'
-even_timestamps, start_and_end_timestamps = get_real_data('d_Duck Identification_40w217q', 'Relevance_of_terms_to_disaster_relief_topics', 'random', 40)
+even_timestamps, start_and_end_timestamps = batch_assignment('d_Duck Identification_40w217q', 'Relevance_of_terms_to_disaster_relief_topics', 'random', 40)
 print ""
 # ans_dataset, arrival_dataset, matching_mode,num_of_batches
