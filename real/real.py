@@ -2,11 +2,14 @@ from process_data import *
 from random import randint
 import time
 import baseline
-import numpy as np
-
 
 #todo: how to make sure existing timestamps can finish all tasks
 
+def find_batch_workers(current_batch, timestamps):
+    for ts in timestamps:
+        if current_batch == ts.items()[0][0]:
+            return ts.items()[0][1]
+    return []
 
 def get_ans_and_truths(dataset):
     truths = read_truths(dataset)
@@ -136,12 +139,27 @@ def ans_mapping(ans, workers, task_list):
         answer['task'] = task_list.index(answer['task'])
 
 
-def reorder_wid_tid(even_timestamps, start_and_end_timestamps, workers, truths, ans):
-    batch_mapping(even_timestamps, workers)
-    batch_mapping(start_and_end_timestamps, workers)
-    task_list, truth_list = task_mapping(truths)
-    ans_mapping(ans, workers, task_list)
+def wid_mapping(timestamps, num_of_batches): # reorder worker according to their arriving orders
+    new_worker_list = []
+    for i in range(0, num_of_batches):
+        for ts in timestamps:
+            current_batch = ts.items()[0][0]
+            if current_batch == i:
+                current_workers = ts.items()[0][1]
+                for w in current_workers:
+                    if w not in new_worker_list:
+                        new_worker_list.append(w)
+    return new_worker_list
 
+
+def reorder_wid_tid(even_timestamps, start_and_end_timestamps, truths, ans, num_of_batches):
+    print "enter"
+    worker_list = wid_mapping(even_timestamps, num_of_batches)
+    batch_mapping(even_timestamps, worker_list)
+    # worker_list2 = wid_mapping(start_and_end_timestamps, num_of_batches)
+    # batch_mapping(start_and_end_timestamps, worker_list)
+    task_list, truth_list = task_mapping(truths)
+    ans_mapping(ans, worker_list, task_list)
 
 
 def batch_assignment(ans_dataset, arrival_dataset, matching_mode,num_of_batches):
@@ -149,13 +167,15 @@ def batch_assignment(ans_dataset, arrival_dataset, matching_mode,num_of_batches)
     arrivals = get_arrival_times(arrival_dataset)
     worker_arrivals = worker_arrivals_match(workers,arrivals,matching_mode)
     even_timestamps, start_and_end_timestamps = divide_timestamps(worker_arrivals, num_of_batches)
-    reorder_wid_tid(even_timestamps, start_and_end_timestamps, workers, truths, ans)
+    reorder_wid_tid(even_timestamps, start_and_end_timestamps, truths, ans, num_of_batches)
     return even_timestamps, start_and_end_timestamps, workers, truths, ans
 
 
 def main(ans_dataset='d_Duck Identification_40w217q', arrival_dataset='Relevance_of_terms_to_disaster_relief_topics',matching_mode='random',num_of_batches=40):
     even_timestamps, start_and_end_timestamps, workers, truths, ans = batch_assignment(ans_dataset, arrival_dataset, matching_mode, num_of_batches)
+
     baseline(even_timestamps, workers, truths, ans, num_of_batches)
+    print ""
     # baseline(even_timestamps, start_and_end_timestamps, num_of_batches, )
     # ff(even_timestamps, start_and_end_timestamps)
     # bf(even_timestamps, start_and_end_timestamps)
