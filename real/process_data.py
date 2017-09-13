@@ -56,10 +56,3 @@ def read_arrival_times(dataset):
                 add_to_arrivals(arrivals, currentline[index_of_user_ids], currentline[index_of_arrivals])
 
         return arrivals
-
-
-# times = read_arrival_times('Relevance_of_terms_to_disaster_relief_topics')
-# labels = read_worker_label('d_Duck Identification_40w217q', )
-# read_worker_label('d_sentiment_1kQ20w')
-# read_worker_label('f201_Emotion_FULL_700q10w')
-# truths = read_truths('d_Duck Identification_40w217q')

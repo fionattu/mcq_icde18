@@ -1,6 +1,8 @@
 from process_data import *
 from random import randint
 import time
+import baseline
+import numpy as np
 
 
 #todo: how to make sure existing timestamps can finish all tasks
@@ -64,9 +66,6 @@ def convert_to_batch(arrival, start, batch_interval):
 def add_to_batch(worker, batch, batch_arrivals):
     for index in range(len(batch_arrivals)):
         for key in batch_arrivals[index]:
-            print "worker:",worker
-            print "list:", batch_arrivals[index][key]
-            print worker in batch_arrivals[index][key]
             if key == batch:
                 if worker in batch_arrivals[index][key]:
                     return
@@ -113,26 +112,55 @@ def divide_timestamps(worker_arrivals, num_of_batches): # 1. only use arriving a
     return even_timestamps, start_and_end_timestamps
 
 
+def batch_mapping(timestamps, workers): #have to check
+    for ts in timestamps:
+        worker_list = ts.items()[0][1]
+        for i in range(len(worker_list)):
+            worker_list[i] = workers.index(worker_list[i])
+
+
+def task_mapping(truths):
+    tasks = []
+    truths_list = []
+    for truth in truths:
+        print truth
+        tasks.append(truth['task'])
+        truths_list.append(truth['truth'])
+
+    return tasks, truths_list
+
+
+def ans_mapping(ans, workers, task_list):
+    for answer in ans:
+        answer['worker'] = workers.index(answer['worker'])
+        answer['task'] = task_list.index(answer['task'])
+
+
+def reorder_wid_tid(even_timestamps, start_and_end_timestamps, workers, truths, ans):
+    batch_mapping(even_timestamps, workers)
+    batch_mapping(start_and_end_timestamps, workers)
+    task_list, truth_list = task_mapping(truths)
+    ans_mapping(ans, workers, task_list)
+
+
+
 def batch_assignment(ans_dataset, arrival_dataset, matching_mode,num_of_batches):
     workers, num_of_workers, truths, num_of_tasks, ans = get_ans_and_truths(ans_dataset)
     arrivals = get_arrival_times(arrival_dataset)
     worker_arrivals = worker_arrivals_match(workers,arrivals,matching_mode)
     even_timestamps, start_and_end_timestamps = divide_timestamps(worker_arrivals, num_of_batches)
-    return even_timestamps, start_and_end_timestamps
+    reorder_wid_tid(even_timestamps, start_and_end_timestamps, workers, truths, ans)
+    return even_timestamps, start_and_end_timestamps, workers, truths, ans
 
 
-def main():
-    even_timestamps, start_and_end_timestamps = batch_assignment('d_Duck Identification_40w217q',
-                                                                 'Relevance_of_terms_to_disaster_relief_topics',
-                                                                 'random', 40)
-    baseline(even_timestamps, start_and_end_timestamps)
-    ff(even_timestamps, start_and_end_timestamps)
-    bf(even_timestamps, start_and_end_timestamps)
-    random(even_timestamps, start_and_end_timestamps)
+def main(ans_dataset='d_Duck Identification_40w217q', arrival_dataset='Relevance_of_terms_to_disaster_relief_topics',matching_mode='random',num_of_batches=40):
+    even_timestamps, start_and_end_timestamps, workers, truths, ans = batch_assignment(ans_dataset, arrival_dataset, matching_mode, num_of_batches)
+    baseline(even_timestamps, workers, truths, ans, num_of_batches)
+    # baseline(even_timestamps, start_and_end_timestamps, num_of_batches, )
+    # ff(even_timestamps, start_and_end_timestamps)
+    # bf(even_timestamps, start_and_end_timestamps)
+    # random(even_timestamps, start_and_end_timestamps)
+    # baseline(even_timestamps, num_of_batches, workers, truths,ans)
 
-# test()
-#'Tweets_about_the_Syrian_civil_war'
-# 'Relevance_of_terms_to_disaster_relief_topics'
-even_timestamps, start_and_end_timestamps = batch_assignment('d_Duck Identification_40w217q', 'Relevance_of_terms_to_disaster_relief_topics', 'random', 40)
-print ""
-# ans_dataset, arrival_dataset, matching_mode,num_of_batches
+num_of_batches = 40
+main()
