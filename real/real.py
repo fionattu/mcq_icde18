@@ -1,9 +1,30 @@
 from process_data import *
 from random import randint
 import time
+import numpy as np
 
 
 #todo: how to make sure existing timestamps can finish all tasks
+
+def add_to_workers(workers, batch_workers):
+    for worker in batch_workers:
+        if worker not in workers:
+            workers.append(worker)
+
+def find_answer(key, task, ans):
+    for answer in ans:
+        if answer['worker'] == key and answer['task'] == task:
+            return int(answer['answer'])
+
+
+def print_accuracy(num_of_tasks, truths, infer_truths):
+    truths_list = np.zeros(num_of_tasks)
+    for i in range(num_of_tasks):
+        truths_list[i] = int(truths[i])
+    for i in range(num_of_tasks):
+        print truths_list[i], " ", infer_truths[i]
+    return (num_of_tasks - np.count_nonzero(np.subtract(truths_list, infer_truths)))
+
 
 def find_batch_workers(current_batch, timestamps):
     for ts in timestamps:
@@ -53,21 +74,22 @@ def convert_to_epoch(datetime_str):
 
 
 def get_start_and_end(worker_arrivals):
-    start = time.time()
+    start = int(time.time())
     end = 0
     for worker_arrival in worker_arrivals:
         arrival_list = worker_arrival.items()[0][1]
-        temp_start = arrival_list[0]
-        temp_end = arrival_list[len(arrival_list) - 1]
-        if temp_start is not None and temp_start < start:
-            start = temp_start
-        if temp_end is not None and temp_end > end:
-            end = temp_end
-    return int(start), int(end)
+        if arrival_list[0] is not None and arrival_list[len(arrival_list) - 1] is not None:
+            temp_start = int(arrival_list[0])
+            temp_end = int(arrival_list[len(arrival_list) - 1])
+            if temp_start < start:
+                start = temp_start
+            if temp_end > end:
+                end = temp_end
+    return start,end
 
 
 def convert_to_batch(arrival, start, batch_interval):
-    return (int)((int)(arrival-start)/batch_interval) + 1
+    return int((int(arrival)-start)/batch_interval) + 1
 
 
 def add_to_batch(worker, batch, batch_arrivals):
@@ -161,6 +183,7 @@ def reorder_wid_tid(start_and_end_timestamps, truths, ans, num_of_batches, worke
     batch_mapping(start_and_end_timestamps, worker_list)
     task_list, truth_list = task_mapping(truths)
     ans_mapping(ans, worker_list, task_list)
+    return start_and_end_timestamps, worker_list, truth_list, ans
 
 
 def batch_assignment(ans_dataset, arrival_dataset, matching_mode,num_of_batches):
@@ -168,5 +191,5 @@ def batch_assignment(ans_dataset, arrival_dataset, matching_mode,num_of_batches)
     arrivals = get_arrival_times(arrival_dataset)
     worker_arrivals = worker_arrivals_match(workers,arrivals,matching_mode)
     start_and_end_timestamps = divide_timestamps(worker_arrivals, num_of_batches)
-    reorder_wid_tid(start_and_end_timestamps, truths, ans, num_of_batches, workers)
-    return start_and_end_timestamps, workers, truths, ans
+    return reorder_wid_tid(start_and_end_timestamps, truths, ans, num_of_batches, workers)
+
