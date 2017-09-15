@@ -55,6 +55,13 @@ def worker_arrivals_match(workers, arrivals, mode): #todo: select top active wro
             res.append({worker:arrival_list})
     if mode == "descend":
         pass
+    if mode == "order":
+        print "order"
+        order = 0
+        for worker in workers:
+            arrival_list = arrivals[order].items()[0][1]
+            res.append({worker:arrival_list})
+            order += 1
     return res
 
 
@@ -63,7 +70,6 @@ def sort_arrivals(worker_arrivals):
         arrival_list = worker_arrival.items()[0][1]
         for i in range(len(arrival_list)):
             arrival_list.sort()
-
 
 
 def get_start_and_end(worker_arrivals):

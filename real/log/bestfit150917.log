@@ -1,49 +1,55 @@
-INFO:root:_________________________iteration: 0_________________________
-INFO:root:task 0 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 1 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 2 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 3 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 5 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 6 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 7 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 8 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 9 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 10 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 11 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 12 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 13 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 14 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 15 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 16 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 17 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 18 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 19 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 20 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 21 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 22 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 23 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 24 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 25 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 26 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 27 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 28 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 29 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:_________________________#completes: 0
 INFO:root:process assign worker 0 task 0
+INFO:root:process assign worker 1 task 0
+INFO:root:process assign worker 2 task 0
+INFO:root:process assign worker 3 task 1
+INFO:root:process assign worker 4 task 1
+INFO:root:process assign worker 5 task 1
+INFO:root:process assign worker 6 task 2
+INFO:root:process assign worker 7 task 2
+INFO:root:process assign worker 8 task 2
+INFO:root:process assign worker 9 task 3
+INFO:root:process assign worker 10 task 3
+INFO:root:process assign worker 11 task 3
+INFO:root:process assign worker 12 task 4
+INFO:root:process assign worker 13 task 4
+INFO:root:process assign worker 14 task 4
+INFO:root:process assign worker 15 task 5
+INFO:root:process assign worker 16 task 5
+INFO:root:process assign worker 17 task 5
+INFO:root:process assign worker 18 task 6
+INFO:root:process assign worker 19 task 6
+INFO:root:process assign worker 20 task 6
+INFO:root:process assign worker 21 task 7
+INFO:root:process assign worker 22 task 7
+INFO:root:process assign worker 23 task 7
+INFO:root:process assign worker 24 task 8
+INFO:root:process assign worker 25 task 8
+INFO:root:process assign worker 26 task 8
+INFO:root:process assign worker 27 task 9
+INFO:root:process assign worker 28 task 9
+INFO:root:process assign worker 29 task 9
+INFO:root:process assign worker 30 task 10
+INFO:root:process assign worker 31 task 10
+INFO:root:process assign worker 32 task 10
+INFO:root:process assign worker 33 task 11
+INFO:root:process assign worker 34 task 11
+INFO:root:process assign worker 35 task 11
+INFO:root:process assign worker 36 task 12
+INFO:root:process assign worker 37 task 12
 INFO:root:_________________________iteration: 1_________________________
-INFO:root:task 1 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 2 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 3 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 5 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 6 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 7 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 8 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 9 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 10 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 11 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 12 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 0 has infer has inferred difficulty score: 0.983865 and confidence 0.991932 and 0.008068
+INFO:root:task 1 has infer has inferred difficulty score: 0.983865 and confidence 0.008068 and 0.991932
+INFO:root:task 2 has infer has inferred difficulty score: 0.983865 and confidence 0.991932 and 0.008068
+INFO:root:task 3 has infer has inferred difficulty score: 1.000000 and confidence 1.000000 and 0.000000
+INFO:root:task 4 has infer has inferred difficulty score: 1.000000 and confidence 1.000000 and 0.000000
+INFO:root:task 5 has infer has inferred difficulty score: 1.000000 and confidence 1.000000 and 0.000000
+INFO:root:task 6 has infer has inferred difficulty score: 0.983865 and confidence 0.991932 and 0.008068
+INFO:root:task 7 has infer has inferred difficulty score: 0.983865 and confidence 0.991932 and 0.008068
+INFO:root:task 8 has infer has inferred difficulty score: 0.983865 and confidence 0.991932 and 0.008068
+INFO:root:task 9 has infer has inferred difficulty score: 0.983865 and confidence 0.991932 and 0.008068
+INFO:root:task 10 has infer has inferred difficulty score: 1.000000 and confidence 1.000000 and 0.000000
+INFO:root:task 11 has infer has inferred difficulty score: 1.000000 and confidence 0.000000 and 1.000000
+INFO:root:task 12 has infer has inferred difficulty score: 0.998946 and confidence 0.999473 and 0.000527
 INFO:root:task 13 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
 INFO:root:task 14 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
 INFO:root:task 15 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
@@ -61,191 +67,133 @@ INFO:root:task 26 has infer has inferred difficulty score: 0.000000 and confiden
 INFO:root:task 27 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
 INFO:root:task 28 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
 INFO:root:task 29 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:_________________________#completes: 1
-INFO:root:process assign worker 0 task 1
-INFO:root:process assign worker 1 task 1
-INFO:root:process assign worker 2 task 2
-INFO:root:process assign worker 3 task 2
-INFO:root:process assign worker 4 task 3
-INFO:root:_________________________iteration: 2_________________________
-INFO:root:task 2 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 5 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 6 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 7 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 8 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 9 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 10 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 11 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 12 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 13 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 14 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 15 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 16 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 17 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 18 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 19 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 20 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 21 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 22 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 23 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 24 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 25 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 26 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 27 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 28 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 29 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:_________________________#completes: 3
-INFO:root:process assign worker 0 task 2
-INFO:root:process assign worker 2 task 4
-INFO:root:process assign worker 3 task 4
-INFO:root:_________________________iteration: 3_________________________
-INFO:root:task 5 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 6 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 7 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 8 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 9 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 10 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 11 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 12 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 13 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 14 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 15 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 16 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 17 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 18 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 19 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 20 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 21 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 22 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 23 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 24 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 25 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 26 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 27 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 28 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 29 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:_________________________#completes: 5
-INFO:root:process assign worker 0 task 5
-INFO:root:process assign worker 2 task 5
-INFO:root:process assign worker 3 task 6
-INFO:root:process assign worker 5 task 6
-INFO:root:process assign worker 6 task 7
-INFO:root:process assign worker 7 task 7
-INFO:root:process assign worker 8 task 8
-INFO:root:process assign worker 9 task 8
-INFO:root:process assign worker 10 task 9
-INFO:root:_________________________iteration: 4_________________________
-INFO:root:task 10 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 11 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 12 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 13 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 14 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 15 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 16 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 17 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 18 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 19 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 20 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 21 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 22 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 23 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 24 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 25 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 26 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 27 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 28 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 29 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:_________________________#completes: 10
-INFO:root:process assign worker 0 task 10
-INFO:root:process assign worker 3 task 10
-INFO:root:process assign worker 5 task 11
-INFO:root:process assign worker 6 task 11
-INFO:root:process assign worker 7 task 12
-INFO:root:process assign worker 8 task 12
+INFO:root:task 30 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 31 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 32 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 33 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 34 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 35 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 36 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 37 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 38 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#total completes: 13
 INFO:root:process assign worker 9 task 13
-INFO:root:process assign worker 10 task 13
-INFO:root:_________________________iteration: 5_________________________
-INFO:root:task 14 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 15 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 16 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 17 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 18 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 19 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 20 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 21 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 22 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 23 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 24 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 25 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 26 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 27 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 28 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 29 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:_________________________#completes: 14
 INFO:root:process assign worker 0 task 14
-INFO:root:process assign worker 3 task 14
-INFO:root:process assign worker 5 task 15
-INFO:root:process assign worker 6 task 15
-INFO:root:process assign worker 7 task 16
-INFO:root:process assign worker 8 task 16
-INFO:root:process assign worker 9 task 17
-INFO:root:process assign worker 10 task 17
-INFO:root:_________________________iteration: 6_________________________
-INFO:root:task 18 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 19 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 20 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 21 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 22 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 23 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 24 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 25 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 26 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 27 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 28 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 29 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:_________________________#completes: 18
-INFO:root:process assign worker 0 task 18
-INFO:root:process assign worker 3 task 18
-INFO:root:process assign worker 5 task 19
+INFO:root:process assign worker 1 task 15
+INFO:root:process assign worker 2 task 16
+INFO:root:process assign worker 3 task 17
+INFO:root:process assign worker 4 task 18
+INFO:root:process assign worker 5 task 18
 INFO:root:process assign worker 6 task 19
 INFO:root:process assign worker 7 task 20
-INFO:root:process assign worker 9 task 20
+INFO:root:process assign worker 8 task 20
 INFO:root:process assign worker 10 task 21
-INFO:root:_________________________iteration: 7_________________________
-INFO:root:task 22 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 23 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 24 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 25 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 26 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 27 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 28 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 29 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:_________________________#completes: 22
-INFO:root:process assign worker 0 task 22
-INFO:root:process assign worker 3 task 22
-INFO:root:process assign worker 5 task 23
-INFO:root:process assign worker 6 task 23
-INFO:root:process assign worker 7 task 24
-INFO:root:process assign worker 9 task 24
-INFO:root:process assign worker 10 task 25
-INFO:root:process assign worker 11 task 25
-INFO:root:process assign worker 12 task 26
-INFO:root:_________________________iteration: 8_________________________
-INFO:root:task 27 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 28 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:task 29 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
-INFO:root:_________________________#completes: 27
-INFO:root:process assign worker 0 task 27
-INFO:root:process assign worker 3 task 27
-INFO:root:process assign worker 5 task 28
-INFO:root:process assign worker 6 task 28
-INFO:root:process assign worker 7 task 29
-INFO:root:process assign worker 9 task 29
-INFO:root:_________________________iteration: 9_________________________
-INFO:root:_________________________#completes: 30
-INFO:root:________________________________result________________________________
+INFO:root:process assign worker 11 task 22
+INFO:root:process assign worker 12 task 23
+INFO:root:process assign worker 13 task 24
+INFO:root:process assign worker 14 task 25
+INFO:root:process assign worker 15 task 26
+INFO:root:process assign worker 16 task 27
+INFO:root:process assign worker 17 task 28
+INFO:root:process assign worker 18 task 28
+INFO:root:process assign worker 19 task 29
+INFO:root:process assign worker 20 task 30
+INFO:root:process assign worker 21 task 30
+INFO:root:process assign worker 22 task 31
+INFO:root:process assign worker 23 task 32
+INFO:root:process assign worker 24 task 32
+INFO:root:process assign worker 25 task 33
+INFO:root:process assign worker 26 task 34
+INFO:root:process assign worker 27 task 35
+INFO:root:process assign worker 28 task 35
+INFO:root:process assign worker 29 task 36
+INFO:root:process assign worker 30 task 37
+INFO:root:process assign worker 31 task 38
+INFO:root:process assign worker 38 task 38
+INFO:root:_________________________iteration: 2_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.609066 and confidence 0.804533 and 0.195467
+INFO:root:task 1 has infer has inferred difficulty score: 0.572367 and confidence 0.213816 and 0.786184
+INFO:root:task 2 has infer has inferred difficulty score: 0.657050 and confidence 0.828525 and 0.171475
+INFO:root:task 3 has infer has inferred difficulty score: 0.970197 and confidence 0.985099 and 0.014901
+INFO:root:task 4 has infer has inferred difficulty score: 0.970197 and confidence 0.985099 and 0.014901
+INFO:root:task 5 has infer has inferred difficulty score: 0.982348 and confidence 0.991174 and 0.008826
+INFO:root:task 6 has infer has inferred difficulty score: 0.510462 and confidence 0.755231 and 0.244769
+INFO:root:task 7 has infer has inferred difficulty score: 0.396470 and confidence 0.698235 and 0.301765
+INFO:root:task 8 has infer has inferred difficulty score: 0.699271 and confidence 0.849635 and 0.150365
+INFO:root:task 9 has infer has inferred difficulty score: 0.572367 and confidence 0.786184 and 0.213816
+INFO:root:task 10 has infer has inferred difficulty score: 0.999999 and confidence 1.000000 and 0.000000
+INFO:root:task 11 has infer has inferred difficulty score: 1.000000 and confidence 0.000000 and 1.000000
+INFO:root:task 12 has infer has inferred difficulty score: 0.998946 and confidence 0.999473 and 0.000527
+INFO:root:task 13 has infer has inferred difficulty score: 0.641249 and confidence 0.820624 and 0.179376
+INFO:root:task 14 has infer has inferred difficulty score: 0.465437 and confidence 0.732718 and 0.267282
+INFO:root:task 15 has infer has inferred difficulty score: 0.190593 and confidence 0.595296 and 0.404704
+INFO:root:task 16 has infer has inferred difficulty score: 0.465437 and confidence 0.732718 and 0.267282
+INFO:root:task 17 has infer has inferred difficulty score: 0.454450 and confidence 0.727225 and 0.272775
+INFO:root:task 18 has infer has inferred difficulty score: 0.647431 and confidence 0.823716 and 0.176284
+INFO:root:task 19 has infer has inferred difficulty score: 0.479684 and confidence 0.260158 and 0.739842
+INFO:root:task 20 has infer has inferred difficulty score: 0.344894 and confidence 0.672447 and 0.327553
+INFO:root:task 21 has infer has inferred difficulty score: 0.641249 and confidence 0.820624 and 0.179376
+INFO:root:task 22 has infer has inferred difficulty score: 0.641249 and confidence 0.820624 and 0.179376
+INFO:root:task 23 has infer has inferred difficulty score: 0.641249 and confidence 0.820624 and 0.179376
+INFO:root:task 24 has infer has inferred difficulty score: 0.641249 and confidence 0.820624 and 0.179376
+INFO:root:task 25 has infer has inferred difficulty score: 0.641249 and confidence 0.179376 and 0.820624
+INFO:root:task 26 has infer has inferred difficulty score: 0.650796 and confidence 0.825398 and 0.174602
+INFO:root:task 27 has infer has inferred difficulty score: 0.650796 and confidence 0.825398 and 0.174602
+INFO:root:task 28 has infer has inferred difficulty score: 0.841457 and confidence 0.920729 and 0.079271
+INFO:root:task 29 has infer has inferred difficulty score: 0.436651 and confidence 0.718325 and 0.281675
+INFO:root:task 30 has infer has inferred difficulty score: 0.654048 and confidence 0.827024 and 0.172976
+INFO:root:task 31 has infer has inferred difficulty score: 0.401233 and confidence 0.299383 and 0.700617
+INFO:root:task 32 has infer has inferred difficulty score: 0.263316 and confidence 0.631658 and 0.368342
+INFO:root:task 33 has infer has inferred difficulty score: 0.497274 and confidence 0.251363 and 0.748637
+INFO:root:task 34 has infer has inferred difficulty score: 0.497274 and confidence 0.748637 and 0.251363
+INFO:root:task 35 has infer has inferred difficulty score: 0.647431 and confidence 0.823716 and 0.176284
+INFO:root:task 36 has infer has inferred difficulty score: 0.454450 and confidence 0.727225 and 0.272775
+INFO:root:task 37 has infer has inferred difficulty score: 0.667222 and confidence 0.833611 and 0.166389
+INFO:root:task 38 has infer has inferred difficulty score: 0.999980 and confidence 0.999990 and 0.000010
+INFO:root:_________________________#total completes: 37
+INFO:root:prescan assign worker 24 minworker 15
+INFO:root:prescan assign worker 18 minworker 32
+INFO:root:_________________________iteration: 3_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.555110 and confidence 0.777555 and 0.222445
+INFO:root:task 1 has infer has inferred difficulty score: 0.572367 and confidence 0.213816 and 0.786184
+INFO:root:task 2 has infer has inferred difficulty score: 0.657050 and confidence 0.828525 and 0.171475
+INFO:root:task 3 has infer has inferred difficulty score: 0.970197 and confidence 0.985099 and 0.014901
+INFO:root:task 4 has infer has inferred difficulty score: 0.970197 and confidence 0.985099 and 0.014901
+INFO:root:task 5 has infer has inferred difficulty score: 0.984423 and confidence 0.992211 and 0.007789
+INFO:root:task 6 has infer has inferred difficulty score: 0.383486 and confidence 0.691743 and 0.308257
+INFO:root:task 7 has infer has inferred difficulty score: 0.522212 and confidence 0.761106 and 0.238894
+INFO:root:task 8 has infer has inferred difficulty score: 0.631115 and confidence 0.815558 and 0.184442
+INFO:root:task 9 has infer has inferred difficulty score: 0.572367 and confidence 0.786184 and 0.213816
+INFO:root:task 10 has infer has inferred difficulty score: 0.999999 and confidence 1.000000 and 0.000000
+INFO:root:task 11 has infer has inferred difficulty score: 1.000000 and confidence 0.000000 and 1.000000
+INFO:root:task 12 has infer has inferred difficulty score: 0.998946 and confidence 0.999473 and 0.000527
+INFO:root:task 13 has infer has inferred difficulty score: 0.641249 and confidence 0.820624 and 0.179376
+INFO:root:task 14 has infer has inferred difficulty score: 0.446824 and confidence 0.723412 and 0.276588
+INFO:root:task 15 has infer has inferred difficulty score: 0.366334 and confidence 0.683167 and 0.316833
+INFO:root:task 16 has infer has inferred difficulty score: 0.446824 and confidence 0.723412 and 0.276588
+INFO:root:task 17 has infer has inferred difficulty score: 0.454450 and confidence 0.727225 and 0.272775
+INFO:root:task 18 has infer has inferred difficulty score: 0.647431 and confidence 0.823716 and 0.176284
+INFO:root:task 19 has infer has inferred difficulty score: 0.479684 and confidence 0.260158 and 0.739842
+INFO:root:task 20 has infer has inferred difficulty score: 0.344894 and confidence 0.672447 and 0.327553
+INFO:root:task 21 has infer has inferred difficulty score: 0.641249 and confidence 0.820624 and 0.179376
+INFO:root:task 22 has infer has inferred difficulty score: 0.641249 and confidence 0.820624 and 0.179376
+INFO:root:task 23 has infer has inferred difficulty score: 0.641249 and confidence 0.820624 and 0.179376
+INFO:root:task 24 has infer has inferred difficulty score: 0.641249 and confidence 0.820624 and 0.179376
+INFO:root:task 25 has infer has inferred difficulty score: 0.641249 and confidence 0.179376 and 0.820624
+INFO:root:task 26 has infer has inferred difficulty score: 0.652142 and confidence 0.826071 and 0.173929
+INFO:root:task 27 has infer has inferred difficulty score: 0.652142 and confidence 0.826071 and 0.173929
+INFO:root:task 28 has infer has inferred difficulty score: 0.873943 and confidence 0.936972 and 0.063028
+INFO:root:task 29 has infer has inferred difficulty score: 0.403807 and confidence 0.701904 and 0.298096
+INFO:root:task 30 has infer has inferred difficulty score: 0.610589 and confidence 0.805295 and 0.194705
+INFO:root:task 31 has infer has inferred difficulty score: 0.435249 and confidence 0.282375 and 0.717625
+INFO:root:task 32 has infer has inferred difficulty score: 0.562534 and confidence 0.781267 and 0.218733
+INFO:root:task 33 has infer has inferred difficulty score: 0.472143 and confidence 0.263928 and 0.736072
+INFO:root:task 34 has infer has inferred difficulty score: 0.472143 and confidence 0.736072 and 0.263928
+INFO:root:task 35 has infer has inferred difficulty score: 0.647431 and confidence 0.823716 and 0.176284
+INFO:root:task 36 has infer has inferred difficulty score: 0.454450 and confidence 0.727225 and 0.272775
+INFO:root:task 37 has infer has inferred difficulty score: 0.667222 and confidence 0.833611 and 0.166389
+INFO:root:task 38 has infer has inferred difficulty score: 0.999980 and confidence 0.999990 and 0.000010
+INFO:root:_________________________#total completes: 39
 INFO:root:bestfit: 
-INFO:root: accuracy: 83.333333
-INFO:root: time: 10.000000
-INFO:root:________________________________result________________________________
+INFO:root: accuracy: 87.179487
+INFO:root: time: 4.000000
