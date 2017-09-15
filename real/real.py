@@ -34,11 +34,12 @@ def find_batch_workers(current_batch, timestamps):
             return worker_set
     return []
 
+
 def get_ans_and_truths(dataset):
     truths = read_truths(dataset)
     workers, ans = read_worker_label(dataset)
 
-    return workers,len(workers), truths, len(truths), ans
+    return workers, truths, ans
 
 
 def get_arrival_times(dataset):
@@ -49,8 +50,9 @@ def worker_arrivals_match(workers, arrivals, mode): #todo: select top active wro
     res = []
     if mode == "random":
         for worker in workers:
-            random = randint(0,len(arrivals))
-            res.append({worker:arrivals[random].items()[0][1]})
+            random = randint(1,len(arrivals)) - 1 #randint is inclusive for both sides
+            arrival_list = arrivals[random].items()[0][1]
+            res.append({worker:arrival_list})
     if mode == "descend":
         pass
     return res
@@ -60,21 +62,12 @@ def sort_arrivals(worker_arrivals):
     for worker_arrival in worker_arrivals:
         arrival_list = worker_arrival.items()[0][1]
         for i in range(len(arrival_list)):
-            arrival_list[i] = convert_to_epoch(arrival_list[i])
-        arrival_list.sort()
+            arrival_list.sort()
 
-
-def convert_to_epoch(datetime_str):
-    patterns = ('%m/%d/%Y %H:%M:%S', '%m/%d/%Y %H:%M')
-    for pattern in patterns:
-        try:
-            return int(time.mktime(time.strptime(str(datetime_str), pattern)))
-        except ValueError:
-            pass
 
 
 def get_start_and_end(worker_arrivals):
-    start = int(time.time())
+    start = time.time()
     end = 0
     for worker_arrival in worker_arrivals:
         arrival_list = worker_arrival.items()[0][1]
@@ -89,7 +82,12 @@ def get_start_and_end(worker_arrivals):
 
 
 def convert_to_batch(arrival, start, batch_interval):
-    return int((int(arrival)-start)/batch_interval) + 1
+    if arrival == start:
+        return 1
+    if (arrival-start) % batch_interval == 0:
+        return int((arrival-start)/batch_interval)
+    else:
+        return int((arrival-start)/batch_interval) + 1
 
 
 def add_to_batch(worker, batch, batch_arrivals):
@@ -166,7 +164,7 @@ def ans_mapping(ans, workers, task_list):
 def wid_mapping(timestamps, num_of_batches): # reorder worker according to their arriving orders
     timestamps = timestamps
     new_worker_list = []
-    for i in range(0, num_of_batches + 3):
+    for i in range(1, num_of_batches + 3):
         for ts in timestamps:
             current_batch = ts.items()[0][0]
             if current_batch == i:
@@ -177,19 +175,24 @@ def wid_mapping(timestamps, num_of_batches): # reorder worker according to their
     return new_worker_list
 
 
-def reorder_wid_tid(start_and_end_timestamps, truths, ans, num_of_batches, workers):
-    worker_list = wid_mapping(start_and_end_timestamps, num_of_batches)
-    worker_list.sort()
-    batch_mapping(start_and_end_timestamps, worker_list)
+def reorder_wid_tid(start_and_end_timestamps, truths, ans, num_of_batches):
+    worker_list = wid_mapping(start_and_end_timestamps, num_of_batches) # worker_list: arrival order
+    batch_mapping(start_and_end_timestamps, worker_list) # re-order worker_list from 0
     task_list, truth_list = task_mapping(truths)
     ans_mapping(ans, worker_list, task_list)
     return start_and_end_timestamps, worker_list, truth_list, ans
 
 
 def batch_assignment(ans_dataset, arrival_dataset, matching_mode,num_of_batches):
-    workers, num_of_workers, truths, num_of_tasks, ans = get_ans_and_truths(ans_dataset)
+    workers, truths, ans = get_ans_and_truths(ans_dataset)
     arrivals = get_arrival_times(arrival_dataset)
-    worker_arrivals = worker_arrivals_match(workers,arrivals,matching_mode)
+    worker_arrivals = worker_arrivals_match(workers,arrivals,matching_mode) # randomly match the true worker arrival data
     start_and_end_timestamps = divide_timestamps(worker_arrivals, num_of_batches)
-    return reorder_wid_tid(start_and_end_timestamps, truths, ans, num_of_batches, workers)
+    return reorder_wid_tid(start_and_end_timestamps, truths, ans, num_of_batches)
 
+
+# ans_dataset = 'test'
+# arrival_dataset = 'test'
+# ans_dataset='d_Duck Identification_40w217q'
+# arrival_dataset='Relevance_of_terms_to_disaster_relief_topics'
+# start_and_end_timestamps, workers, truths, ans = batch_assignment(ans_dataset, arrival_dataset, 'random',30)

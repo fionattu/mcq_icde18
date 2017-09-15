@@ -1,4 +1,3 @@
-from real import *
 from qasca_helper import *
 from qasca_synthetic import *
 
@@ -6,7 +5,9 @@ from qasca_synthetic import *
 
 def run_qasca(timestamps, worker_set, truths, ans, num_of_batches, num_of_choices, eval, repetition, k, confidence_init, difficulty_init, expertise_init):
     num_of_workers = len(worker_set)
-    num_of_tasks = num_of_workers * k
+    print "workers len:", num_of_workers
+    num_of_tasks = 30
+    print "tasks len: ", num_of_tasks
     assign_tbw = np.zeros((num_of_tasks, num_of_workers))
     assign_scheme_tbw = [np.zeros((num_of_tasks, num_of_workers)) for _ in range(num_of_choices)]  # assignmnet scheme
     quality = [uniform_random_generator(0.5, 0.999)] * num_of_workers
@@ -37,7 +38,6 @@ def run_qasca(timestamps, worker_set, truths, ans, num_of_batches, num_of_choice
     # em = qasca_EM.infer(resList, quality)
     #
     # infer_truths = get_result(num_of_tasks, em)
-    print ""
     #using MCQ inference
     [infer_expertise, infer_expertise_score, infer_confidence, infer_confidence_score, infer_difficulty,
      infer_difficulty_score] = start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_tbw,

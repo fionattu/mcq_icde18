@@ -356,9 +356,9 @@ def start_inference(num_of_workers, num_of_tasks, num_of_choices, assign_scheme_
 def process_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, infer_confidence, completed_tasks, infer_truths):
     for i in range(num_of_tasks):
         if i in completed_tasks and infer_truths[i] == 0:
-            infer_truths[i] = 1 if infer_confidence[0][i] > infer_confidence[1][i] else 2
+            infer_truths[i] = 0 if infer_confidence[0][i] > infer_confidence[1][i] else 1
         if i not in completed_tasks and infer_difficulty_score[i] >= threshold:
-            infer_truths[i] = 1 if infer_confidence[0][i] > infer_confidence[1][i] else 2
+            infer_truths[i] = 0 if infer_confidence[0][i] > infer_confidence[1][i] else 1
             completed_tasks.append(i)
 
     for i in range(num_of_tasks):
@@ -369,14 +369,15 @@ def process_completed_tasks(num_of_tasks, threshold, infer_difficulty_score, inf
 
 def synthetic_exp(assign_mode, timestamps, truths, worker_set, ans, num_of_batches, num_of_choices, num_of_tasks, expertise_init, difficulty_init, confidence_init, threshold):
     num_of_workers = len(worker_set)
+    print "worker len: ", num_of_workers
+    print "task len", num_of_tasks
     infer_expertise = np.zeros(num_of_workers)
     infer_expertise_score = [-np.log(1-expertise_init)] * num_of_workers
     infer_confidence = [[confidence_init] * num_of_tasks for _ in range(num_of_choices)]
     infer_confidence_score = [ np.zeros(num_of_tasks) for _ in range(num_of_choices)]
     infer_difficulty = [difficulty_init] * num_of_tasks
     assign_scheme_tbw = [np.zeros((num_of_tasks, num_of_workers)) for _ in range(num_of_choices)]  # assignmnet scheme
-    truths = tasks_generator(num_of_tasks, num_of_choices) # 1 x tasks
-    difficulty_truths = [uniform_random_generator(0.8,1)] * num_of_tasks
+    difficulty_truths = [uniform_random_generator(0.9,1)] * num_of_tasks
     expertise_truths = [uniform_random_generator(0.5, 0.999)] * num_of_workers
     infer_truths = np.zeros(num_of_tasks)
     completed_tasks = []
@@ -412,14 +413,14 @@ def synthetic_exp(assign_mode, timestamps, truths, worker_set, ans, num_of_batch
 
 # num_of_tasks = [50,100,150,200,500,1000]
 iteration = 1
-worker_arri_rate = 1
 threshold = 0.3
-num_of_tasks = 10 # have to compare with baseline
+num_of_tasks = 30 # have to compare with baseline
+num_of_batches=40
 
 ans_dataset='d_Duck Identification_40w217q'
 arrival_dataset='Relevance_of_terms_to_disaster_relief_topics'
 matching_mode='random'
-num_of_batches=40
+
 
 num_of_choices = 2
 expertise_init = 0.5
@@ -451,4 +452,5 @@ def print_result(assign_mode):
     logging.info("________________________________result________________________________")
 
 
-print_result('firstfit')
+# print_result('firstfit')
+print_result('bestfit')

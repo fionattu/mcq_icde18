@@ -1,5 +1,7 @@
 import csv
 import regex as re
+import time
+
 
 def read_worker_label(dataset):
     file_path = './datasets/' + dataset + '/answer.csv'
@@ -30,13 +32,23 @@ def read_truths(dataset):
         return truths
 
 
+def convert_to_epoch(datetime_str):
+    patterns = ('%m/%d/%Y %H:%M:%S', '%m/%d/%Y %H:%M')
+    for pattern in patterns:
+        try:
+            return int(time.mktime(time.strptime(str(datetime_str), pattern)))
+        except ValueError:
+            pass
+
+
 def add_to_arrivals(arrivals, worker, time):
+    epoch_time = convert_to_epoch(time)
     for index in range(len(arrivals)):
         for key in arrivals[index]:
             if key == worker:
-                arrivals[index][key].append(time)
+                arrivals[index][key].append(epoch_time)
                 return
-    arrivals.append({worker:[time]})
+    arrivals.append({worker:[epoch_time]})
 
 
 def read_arrival_times(dataset):
@@ -54,5 +66,8 @@ def read_arrival_times(dataset):
             currentline = rx.split(line[0])
             if (currentline[index_of_golden] == 'FALSE'):
                 add_to_arrivals(arrivals, currentline[index_of_user_ids], currentline[index_of_arrivals])
-
+        print arrivals
         return arrivals
+
+# arrival_test = [{'4': [1453978938, 1454122879]}, {'5': [1453978938, 1454122879]}, {'6': [1453978938, 1454122879]}]
+# read_arrival_times('Relevance_of_terms_to_disaster_relief_topics')
