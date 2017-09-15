@@ -1,0 +1,6 @@
+INFO:root:________________________________result________________________________
+INFO:root:number of tasks:50, worker arri rate:1, iterations:10, threshold: 0.300000
+INFO:root:baseline: 
+INFO:root: accuracy: 83.400000
+INFO:root: time: 16.000000
+INFO:root:________________________________result________________________________

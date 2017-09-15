@@ -1,0 +1,188 @@
+INFO:root:assign worker 0 task 1
+INFO:root:_________________________iteration: 0_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 2 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 3 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 1
+INFO:root:assign worker 0 task 3
+INFO:root:assign worker 1 task 2
+INFO:root:_________________________iteration: 1_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 3
+INFO:root:assign worker 0 task 4
+INFO:root:assign worker 1 task 0
+INFO:root:assign worker 2 task 4
+INFO:root:_________________________iteration: 2_________________________
+INFO:root:_________________________#completes: 5
+INFO:root:assign worker 0 task 1
+INFO:root:_________________________iteration: 0_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 2 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 3 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 1
+INFO:root:assign worker 0 task 3
+INFO:root:assign worker 1 task 3
+INFO:root:_________________________iteration: 1_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 2 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 2
+INFO:root:assign worker 0 task 0
+INFO:root:assign worker 1 task 4
+INFO:root:assign worker 2 task 2
+INFO:root:_________________________iteration: 2_________________________
+INFO:root:_________________________#completes: 5
+INFO:root:assign worker 0 task 4
+INFO:root:_________________________iteration: 0_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 1 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 2 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 3 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 1
+INFO:root:assign worker 0 task 0
+INFO:root:assign worker 1 task 1
+INFO:root:_________________________iteration: 1_________________________
+INFO:root:task 2 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 3 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 3
+INFO:root:assign worker 0 task 3
+INFO:root:assign worker 1 task 3
+INFO:root:assign worker 2 task 2
+INFO:root:_________________________iteration: 2_________________________
+INFO:root:_________________________#completes: 5
+INFO:root:assign worker 0 task 3
+INFO:root:_________________________iteration: 0_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 1 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 2 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 1
+INFO:root:assign worker 0 task 2
+INFO:root:assign worker 1 task 0
+INFO:root:_________________________iteration: 1_________________________
+INFO:root:task 1 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 3
+INFO:root:assign worker 0 task 1
+INFO:root:assign worker 1 task 4
+INFO:root:assign worker 2 task 4
+INFO:root:_________________________iteration: 2_________________________
+INFO:root:_________________________#completes: 5
+INFO:root:assign worker 0 task 2
+INFO:root:_________________________iteration: 0_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 1 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 3 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 1
+INFO:root:assign worker 0 task 0
+INFO:root:assign worker 1 task 4
+INFO:root:_________________________iteration: 1_________________________
+INFO:root:task 1 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 3 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 3
+INFO:root:assign worker 0 task 1
+INFO:root:assign worker 1 task 3
+INFO:root:assign worker 2 task 1
+INFO:root:_________________________iteration: 2_________________________
+INFO:root:_________________________#completes: 5
+INFO:root:assign worker 0 task 3
+INFO:root:_________________________iteration: 0_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 1 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 2 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 1
+INFO:root:assign worker 0 task 2
+INFO:root:assign worker 1 task 4
+INFO:root:_________________________iteration: 1_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 1 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 3
+INFO:root:assign worker 0 task 1
+INFO:root:assign worker 1 task 0
+INFO:root:assign worker 2 task 0
+INFO:root:_________________________iteration: 2_________________________
+INFO:root:_________________________#completes: 5
+INFO:root:assign worker 0 task 3
+INFO:root:_________________________iteration: 0_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 1 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 2 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 1
+INFO:root:assign worker 0 task 0
+INFO:root:assign worker 1 task 4
+INFO:root:_________________________iteration: 1_________________________
+INFO:root:task 1 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 2 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 3
+INFO:root:assign worker 0 task 2
+INFO:root:assign worker 1 task 1
+INFO:root:assign worker 2 task 2
+INFO:root:_________________________iteration: 2_________________________
+INFO:root:_________________________#completes: 5
+INFO:root:assign worker 0 task 2
+INFO:root:_________________________iteration: 0_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 1 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 3 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 1
+INFO:root:assign worker 0 task 1
+INFO:root:assign worker 1 task 1
+INFO:root:_________________________iteration: 1_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 3 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 2
+INFO:root:assign worker 0 task 0
+INFO:root:assign worker 1 task 4
+INFO:root:assign worker 2 task 3
+INFO:root:_________________________iteration: 2_________________________
+INFO:root:_________________________#completes: 5
+INFO:root:assign worker 0 task 0
+INFO:root:_________________________iteration: 0_________________________
+INFO:root:task 1 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 2 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 3 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 1
+INFO:root:assign worker 0 task 4
+INFO:root:assign worker 1 task 1
+INFO:root:_________________________iteration: 1_________________________
+INFO:root:task 2 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 3 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 3
+INFO:root:assign worker 0 task 2
+INFO:root:assign worker 1 task 2
+INFO:root:assign worker 2 task 3
+INFO:root:_________________________iteration: 2_________________________
+INFO:root:_________________________#completes: 5
+INFO:root:assign worker 0 task 3
+INFO:root:_________________________iteration: 0_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 1 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 2 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 1
+INFO:root:assign worker 0 task 2
+INFO:root:assign worker 1 task 1
+INFO:root:_________________________iteration: 1_________________________
+INFO:root:task 0 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:task 4 has infer has inferred difficulty score: 0.000000 and confidence 0.500000 and 0.500000
+INFO:root:_________________________#completes: 3
+INFO:root:assign worker 0 task 0
+INFO:root:assign worker 1 task 4
+INFO:root:assign worker 2 task 4
+INFO:root:_________________________iteration: 2_________________________
+INFO:root:_________________________#completes: 5
+INFO:root:________________________________result________________________________
+INFO:root:number of tasks:5, worker arri rate:1, iterations:10, threshold: 0.300000
+INFO:root:random: 
+INFO:root: accuracy: 98.000000
+INFO:root: time: 3.000000
+INFO:root:________________________________result________________________________
