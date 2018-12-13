@@ -6,7 +6,7 @@ from qasca_synthetic import *
 def run_qasca(timestamps, worker_set, truths, ans, num_of_batches, num_of_choices, eval, repetition, k, confidence_init, difficulty_init, expertise_init):
     num_of_workers = len(worker_set)
     print "workers len:", num_of_workers
-    num_of_tasks = 30
+    num_of_tasks = 80
     print "tasks len: ", num_of_tasks
     assign_tbw = np.zeros((num_of_tasks, num_of_workers))
     assign_scheme_tbw = [np.zeros((num_of_tasks, num_of_workers)) for _ in range(num_of_choices)]  # assignmnet scheme

@@ -285,7 +285,7 @@ def synthetic_exp(assign_mode, timestamps, truths, worker_set, ans, num_of_batch
 
 
 # num_of_tasks = [50,100,150,200,500,1000]
-num_of_tasks = 39
+num_of_tasks = 80
 iteration = 1
 threshold = 0.3
 num_of_batches=40
